@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+
+  f1bot:
+    image: f1bot/f1bot:latest
+    ports:
+      - 9999:9999
+      - 4444:4444
+    depends_on: [mongo]
+    environment:
+      SPRING_PROFILES_ACTIVE: local-discovery
+      API_JAVA_ARGS: >
+        -Dlogging.level.org.springframework.web.client.RestTemplate=DEBUG
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4444
