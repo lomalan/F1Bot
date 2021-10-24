@@ -13,7 +13,6 @@ services:
       - 4444:4444
     depends_on: [mongo]
     environment:
-      SPRING_PROFILES_ACTIVE: local-discovery
-      API_JAVA_ARGS: >
+      JAVA_OPTS:
         -Dlogging.level.org.springframework.web.client.RestTemplate=DEBUG
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4444
