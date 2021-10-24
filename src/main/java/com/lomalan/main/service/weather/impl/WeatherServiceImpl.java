@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+/**
+ * Processing current weather data during the race weekend
+ */
 @Service
 @AllArgsConstructor
 @Slf4j

@@ -1,4 +1,4 @@
-package com.lomalan.main.rest;
+package com.lomalan.main.controller;
 
 import com.lomalan.main.bot.SportNewsBot;
 import org.springframework.web.bind.annotation.PostMapping;

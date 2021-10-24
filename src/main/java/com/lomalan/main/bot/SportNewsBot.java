@@ -13,6 +13,9 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+/**
+ * The application entrypoint
+ */
 @Component
 @Slf4j
 public class SportNewsBot extends TelegramWebhookBot {
