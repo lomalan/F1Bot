@@ -5,10 +5,8 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public interface RaceService {
+public interface PartialBotMethodService {
 
-  Optional<PartialBotApiMethod<Message>> getRaceData(Update update);
-
-  Optional<PartialBotApiMethod<Message>> getDriversStanding(Update update);
+  Optional<PartialBotApiMethod<Message>> getPartialBotApiMethod(Update update);
 
 }

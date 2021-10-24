@@ -8,7 +8,6 @@ import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
 import com.lomalan.main.service.impl.MessageConstructor;
 import com.lomalan.main.service.message.MessageExecutor;
-import com.lomalan.main.service.weather.WeatherService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,18 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class WeatherServiceImpl implements WeatherService {
+public class WeatherServiceImpl {
 
   private final F1SchedulesRestClient f1SchedulesRestClient;
   private final WeatherRestClient weatherRestClient;
   private final TelegramUserRepository userRepository;
   private final MessageExecutor messageExecutor;
-
-  @Override
-  public void getCurrentWeather() {
-    scheduleWeatherUpdates();
-  }
-
 
   @Scheduled(cron = "0 0/30 8-18 * * FRI-SUN")
   public void scheduleWeatherUpdates() {

@@ -8,18 +8,13 @@ public class SubUtils {
   /** Private constructor to avoid instantiation of class */
   private SubUtils() {}
 
-  public static TelegramUser prepareUserToSave(
-      User user,
-      boolean isSubscribedOnWeather,
-      boolean isSubscribedOnLiveUpdates) {
+  public static TelegramUser prepareUserToSave(User user) {
     return TelegramUser.builder()
         .userName(user.getUserName())
         .firstName(user.getFirstName())
         .lastName(user.getLastName())
         .chatId(String.valueOf(user.getId()))
         .isBot(user.getIsBot())
-        .subscribedOnWeather(isSubscribedOnWeather)
-        .subscribedOnLiveUpdates(isSubscribedOnLiveUpdates)
         .build();
   }
 
