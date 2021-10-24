@@ -8,7 +8,7 @@ import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -50,8 +50,8 @@ public class SportNewsBot extends TelegramWebhookBot {
     PartialBotApiMethod<Message> method = botFacadeService.processUpdateWithMessage(update);
     if (method instanceof SendMessage) {
       execute((SendMessage) method);
-    } else {
-      execute((SendSticker) method);
+    } else if (method instanceof SendPhoto) {
+      execute((SendPhoto) method);
     }
   }
 
