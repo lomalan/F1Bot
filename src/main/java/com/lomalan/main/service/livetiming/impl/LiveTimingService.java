@@ -31,7 +31,7 @@ public class LiveTimingService {
   public void getLiveDriverInfo() {
     log.info("Start to search live subs.....");
     StreamingStatus streamingStatus = liveTimingRestClient.getStreamingStatus();
-    if (streamingStatus.getStatus().equals("Offline") || streamingStatus.getStatus().equals("Available")) {
+    if (streamingStatus.getStatus().equals("Offline")) {
       return;
     }
     Optional<LiveTimingInfo> liveTimingInfo = liveTimingHtmlClient.getLiveTimingInfo();

@@ -31,8 +31,9 @@ public class BotFacadeServiceImpl implements BotFacadeService {
   @Override
   public PartialBotApiMethod<Message> processUpdateWithMessage(Update update) {
     return raceService.getRaceData(update)
-        .orElse(sendDefaultMessage(update, processSubscriptionServices(update)
-            .orElse("Please use the main menu")));
+        .orElse(raceService.getDriversStanding(update)
+            .orElse(sendDefaultMessage(update, processSubscriptionServices(update)
+                .orElse("Please use the main menu"))));
   }
 
   private SendMessage sendDefaultMessage(Update update, java.lang.String text) {

@@ -8,4 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public interface RaceService {
 
   Optional<PartialBotApiMethod<Message>> getRaceData(Update update);
+
+  Optional<PartialBotApiMethod<Message>> getDriversStanding(Update update);
+
 }

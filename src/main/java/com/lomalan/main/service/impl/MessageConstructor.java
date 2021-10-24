@@ -1,6 +1,7 @@
 package com.lomalan.main.service.impl;
 
 import com.lomalan.main.Emojis;
+import com.lomalan.main.rest.model.f1.DriverStandings;
 import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.livetiming.DriverInfo;
 import com.lomalan.main.rest.model.livetiming.LiveTimingInfo;
@@ -10,6 +11,7 @@ import com.lomalan.main.rest.model.weather.WeatherResponse;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,6 +24,10 @@ public class MessageConstructor {
 
   public static String constructNextRaceMessage(Race nextRace) {
     return getRaceInfo(nextRace);
+  }
+
+  public static String constructStandingsMessage(List<DriverStandings> driverStandings) {
+    return getDriversStanding(driverStandings);
   }
 
   public static String constructWeatherMessage(WeatherResponse response) {
@@ -54,6 +60,21 @@ public class MessageConstructor {
         + "Humidity: " + weatherInfo.getHumidity() + "%\n\n"
         + "Wind speed: " + response.getWindSpeed() + " m/s \n"
         + "Cloudiness: " + response.getCloudiness() + "%";
+  }
+
+  private static String getDriversStanding(List<DriverStandings> driverStandings) {
+    return
+        "Current drivers standing \n\n"
+        + "POS NAME POINTS \n\n"
+        + driverStandings.stream()
+            .map(MessageConstructor::toStringValue)
+            .collect(Collectors.joining("\n"));
+  }
+
+  private static String toStringValue(DriverStandings driverStandings) {
+    return driverStandings.getPosition().concat(". ")
+        .concat(driverStandings.getDriver().getCode()).concat(StringUtils.SPACE)
+        .concat(String.valueOf(driverStandings.getPoints()));
   }
 
   private static String getRaceInfo(Race race) {
