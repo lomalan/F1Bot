@@ -28,6 +28,9 @@ public class WeatherServiceImpl {
   public void scheduleWeatherUpdates() {
     log.info("Start to search subscribers on weather updates.... ");
     List<TelegramUser> telegramUsers = userRepository.findAll();
+    if (telegramUsers.isEmpty()) {
+      return;
+    }
     Race nextRace = f1SchedulesRestClient.getNextRace();
     String cityName = nextRace.getCircuit().getLocation().getLocality();
     WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(cityName);

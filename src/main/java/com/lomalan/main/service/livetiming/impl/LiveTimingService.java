@@ -7,7 +7,7 @@ import com.lomalan.main.dao.repository.TelegramUserRepository;
 import com.lomalan.main.rest.client.livetiming.LiveTimingHtmlClient;
 import com.lomalan.main.rest.client.livetiming.LiveTimingRestClient;
 import com.lomalan.main.rest.model.livetiming.LiveTimingInfo;
-import com.lomalan.main.rest.model.livetiming.StreamingStatus;
+import com.lomalan.main.rest.model.livetiming.SessionInfo;
 import com.lomalan.main.service.message.MessageExecutor;
 import java.util.List;
 import java.util.Optional;
@@ -27,26 +27,30 @@ public class LiveTimingService {
   private final LiveTimingHtmlClient liveTimingHtmlClient;
 
 
-  @Scheduled(initialDelay = 10000, fixedDelay = 300000)
+
+  @Scheduled(cron = "0 0/1 * * * SAT-SUN")
   public void getLiveDriverInfo() {
     log.info("Start to search live subs.....");
-    StreamingStatus streamingStatus = liveTimingRestClient.getStreamingStatus();
-    if (streamingStatus.getStatus().equals("Offline")) {
+    List<TelegramUser> telegramUsers = userRepository.findAll();
+    if (telegramUsers.isEmpty()) {
+      return;
+    }
+    SessionInfo sessionInfo = liveTimingRestClient.getCurrentSessionInfo();
+    if (!sessionInfo.getStatus().equals("Complete") || !sessionInfo.getType().equals("Practice")) {
       return;
     }
     Optional<LiveTimingInfo> liveTimingInfo = liveTimingHtmlClient.getLiveTimingInfo();
     liveTimingInfo
-        .ifPresent(this::processMessage);
+        .ifPresent(timingInfo -> processMessage(timingInfo, telegramUsers));
   }
 
-  private void processMessage(LiveTimingInfo timingInfo) {
+  private void processMessage(LiveTimingInfo timingInfo, List<TelegramUser> users) {
     String messageToExecute = constructMessage(timingInfo);
     log.info(messageToExecute);
-    executeUpdatedData(messageToExecute);
+    executeUpdatedData(users, messageToExecute);
   }
 
-  private void executeUpdatedData(String message) {
-    List<TelegramUser> telegramUsers = userRepository.findAll();
+  private void executeUpdatedData(List<TelegramUser> telegramUsers, String message) {
     telegramUsers.stream()
         .filter(TelegramUser::isSubscribedOnLiveUpdates)
         .forEach(user -> messageExecutor.executeMessage(user, message));

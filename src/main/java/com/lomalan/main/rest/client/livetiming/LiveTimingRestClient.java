@@ -25,7 +25,7 @@ public class LiveTimingRestClient {
     this.restTemplate = restTemplate;
   }
 
-  private SessionInfo getCurrentSessionInfo() {
+  public SessionInfo getCurrentSessionInfo() {
     UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(liveTimingApi.concat(SESSION_INFO));
     HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
     return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, SessionInfo.class).getBody();

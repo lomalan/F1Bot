@@ -36,8 +36,8 @@ public class LiveTimingHtmlClient {
 
   public Optional<LiveTimingInfo> getLiveTimingInfo() {
     try (WebClient webClient = new WebClient()) {
-      HtmlPage page = webClient.getPage(liveTimingUrl);
       setupWebClient(webClient);
+      HtmlPage page = webClient.getPage(liveTimingUrl);
       Pair<String, String> raceNameAndStatus = getRaceNameAndStatus(page);
       List<DriverInfo> driverInfoTwos = getDriversInfo(page);
       return Optional
@@ -60,18 +60,7 @@ public class LiveTimingHtmlClient {
   private void setupWebClient(WebClient webClient) {
     webClient.setJavaScriptErrorListener(new SilentJavaScriptErrorListener());
     webClient.setIncorrectnessListener((s, o) -> {
-      //empty
-    });
-    webClient.setHTMLParserListener(new HTMLParserListener() {
-      @Override
-      public void error(String s, URL url, String s1, int i, int i1, String s2) {
-        //empty
-      }
-
-      @Override
-      public void warning(String s, URL url, String s1, int i, int i1, String s2) {
-        //empty
-      }
+      //empty implementation to avoid redundant log messages
     });
 
     webClient.setCssErrorHandler(new SilentCssErrorHandler());
