@@ -5,3 +5,12 @@
 3. Put created tunneling address in the bot.webhookUrl property 
 4. mvn clean package docker:build
 5. docker-compose up f1bot from src/main/docker/local directory
+
+
+####Other notes:
+To use weather service you need to create profile on https://api.openweathermap.org
+
+How to create bot you can read here  
+https://core.telegram.org/bots
+
+When bot will be created you will have personal token which you can use in application properties
