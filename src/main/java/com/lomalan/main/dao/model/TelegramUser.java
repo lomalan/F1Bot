@@ -3,6 +3,7 @@ package com.lomalan.main.dao.model;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 @Data
 @Builder
@@ -14,5 +15,8 @@ public class TelegramUser {
   private String firstName;
   private String lastName;
   private String userName;
+  @Indexed(unique = true)
   private String chatId;
+  private boolean subscribedOnWeather;
+  private boolean subscribedOnLiveUpdates;
 }

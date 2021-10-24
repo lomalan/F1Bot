@@ -67,7 +67,19 @@
 			<artifactId>emoji-java</artifactId>
 			<version>5.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.olerom.formula-one-ergast</groupId>
+			<artifactId>ergast</artifactId>
+			<version>0.1.1</version>
+		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<finalName>application</finalName>

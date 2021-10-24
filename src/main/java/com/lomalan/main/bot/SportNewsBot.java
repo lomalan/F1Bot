@@ -48,6 +48,10 @@ public class SportNewsBot extends TelegramWebhookBot {
 
   private void processUpdate(Update update) throws TelegramApiException {
     PartialBotApiMethod<Message> method = botFacadeService.processUpdateWithMessage(update);
+    executeMethod(method);
+  }
+
+  public void executeMethod(PartialBotApiMethod<Message> method) throws TelegramApiException {
     if (method instanceof SendMessage) {
       execute((SendMessage) method);
     } else if (method instanceof SendPhoto) {

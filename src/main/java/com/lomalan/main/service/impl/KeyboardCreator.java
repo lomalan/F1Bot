@@ -1,7 +1,6 @@
 package com.lomalan.main.service.impl;
 
 import com.lomalan.main.bot.commands.BotCommands;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -12,8 +11,10 @@ public class KeyboardCreator {
 
   private KeyboardCreator() {}
 
-  public static ReplyKeyboardMarkup constructMainMenuKeyboard() {
-    return getReplyKeyboardMarkup(getKeyboardRows());
+  public static ReplyKeyboardMarkup constructCustomMenuKeyBoard(List<BotCommands> commands) {
+    List<KeyboardRow> customRows = commands.stream().map(KeyboardCreator::createKeyboardRow)
+        .collect(Collectors.toList());
+    return getReplyKeyboardMarkup(customRows);
   }
 
   private static ReplyKeyboardMarkup getReplyKeyboardMarkup(List<KeyboardRow> keyboardRows) {
@@ -23,12 +24,6 @@ public class KeyboardCreator {
     replyKeyboardMarkup.setOneTimeKeyboard(false);
     replyKeyboardMarkup.setKeyboard(keyboardRows);
     return replyKeyboardMarkup;
-  }
-
-  private static List<KeyboardRow> getKeyboardRows() {
-    return Arrays.stream(BotCommands.values())
-        .map(KeyboardCreator::createKeyboardRow)
-        .collect(Collectors.toList());
   }
 
   private static KeyboardRow createKeyboardRow(BotCommands command) {
