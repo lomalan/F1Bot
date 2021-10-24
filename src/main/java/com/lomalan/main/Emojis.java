@@ -22,6 +22,7 @@ public enum Emojis {
   RAIN(EmojiParser.parseToUnicode(":cloud_rain:")),
   SNOW(EmojiParser.parseToUnicode(":cloud_snow:")),
   DRIZZLE(EmojiParser.parseToUnicode(":white_sun_behind_cloud_rain:")),
+  MIST(EmojiParser.parseToUnicode(":fog:")),
 
   F1(EmojiParser.parseToUnicode(":f1:"));
 
