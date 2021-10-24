@@ -31,7 +31,7 @@ public class LiveTimingService {
 
 
 
-  @Scheduled(cron = "0 0/1 * * * SAT-SUN")
+  @Scheduled(cron = "0 0/5 * * * SAT-SUN")
   public void getLiveDriverInfo() {
     log.info("Start to search live subs.....");
     List<TelegramUser> telegramUsers = userRepository.findAll();
