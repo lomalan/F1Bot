@@ -2,8 +2,10 @@ package com.lomalan.main.bot.commands;
 
 public enum BotCommands {
   NEXT_RACE("Next Race"),
-  CURRENT_WEATHER("Subscribe on Weather"),
-  UNSUB_WEATHER("Unsubscribe from Weather");
+  CURRENT_WEATHER("Subscribe on weather"),
+  UNSUB_WEATHER("Unsubscribe from weather"),
+  SUB_LIVE("Subscribe on live timing"),
+  UNSUB_LIVE("Unsubscribe from live timing");
 
   private final String commandName;
 

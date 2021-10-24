@@ -9,5 +9,7 @@ public interface SubscriptionsService {
 
   Optional<String> unsubscribe(Update update);
 
+  String getCurrentCommand(Update update);
+
   boolean isSubscribed(Update update);
 }

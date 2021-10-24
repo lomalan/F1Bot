@@ -1,5 +1,7 @@
 package com.lomalan.main.service.subscriptions.impl;
 
+import static com.lomalan.main.service.subscriptions.util.SubUtils.prepareUserToSave;
+
 import com.lomalan.main.bot.commands.BotCommands;
 import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
@@ -10,16 +12,16 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
-public class SubscriptionsServiceImpl implements SubscriptionsService {
+public class WeatherSubscriptionsService implements SubscriptionsService {
 
   private final TelegramUserRepository userRepository;
 
-  public SubscriptionsServiceImpl(TelegramUserRepository userRepository) {
+  public WeatherSubscriptionsService(TelegramUserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
   @Override
-  public Optional<String> subscribe(Update update) {
+  public Optional<java.lang.String> subscribe(Update update) {
     if (!update.getMessage().getText().equals(BotCommands.CURRENT_WEATHER.getCommandName())) {
       return Optional.empty();
     }
@@ -28,7 +30,7 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
     if (isSubscribed(update)) {
       return Optional.of("You're already subscribed");
     }
-    TelegramUser telegramUser = userRepository.findByChatId(String.valueOf(user.getId()));
+    TelegramUser telegramUser = userRepository.findByChatId(java.lang.String.valueOf(user.getId()));
     if (telegramUser == null) {
       userRepository.save(prepareUserToSave(user, true, false));
     } else {
@@ -36,18 +38,18 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
       userRepository.save(telegramUser);
     }
 
-    return Optional.of("You're successfully subscribed on weather updates.\n\n "
-            +    "You will receive every hour weather updates during the weekend before qualification and race");
+    return Optional.of("You're successfully subscribed on weather updates.\n\n"
+            +    "You will receive every 30 minutes weather updates during the weekend before qualification and race");
   }
 
   @Override
-  public Optional<String> unsubscribe(Update update) {
+  public Optional<java.lang.String> unsubscribe(Update update) {
     if (!update.getMessage().getText().equals(BotCommands.UNSUB_WEATHER.getCommandName())) {
       return Optional.empty();
     }
 
     User user = update.getMessage().getFrom();
-    TelegramUser telegramUser = userRepository.findByChatId(String.valueOf(user.getId()));
+    TelegramUser telegramUser = userRepository.findByChatId(java.lang.String.valueOf(user.getId()));
     if (telegramUser == null) {
       return Optional.of("You're not subscribed!");
     }
@@ -58,26 +60,19 @@ public class SubscriptionsServiceImpl implements SubscriptionsService {
   }
 
   @Override
+  public String getCurrentCommand(Update update) {
+    if (isSubscribed(update)) {
+      return BotCommands.CURRENT_WEATHER.getCommandName();
+    }
+    return BotCommands.UNSUB_WEATHER.getCommandName();
+  }
+
+  @Override
   public boolean isSubscribed(Update update) {
     TelegramUser user = userRepository.findByChatId(update.getMessage().getChatId().toString());
     if (user == null) {
       return false;
     }
     return user.isSubscribedOnWeather();
-  }
-
-
-  private TelegramUser prepareUserToSave(User user,
-      boolean isSubscribedOnWeather,
-      boolean isSubscribedOnLiveUpdates) {
-    return TelegramUser.builder()
-        .userName(user.getUserName())
-        .firstName(user.getFirstName())
-        .lastName(user.getLastName())
-        .chatId(String.valueOf(user.getId()))
-        .isBot(user.getIsBot())
-        .subscribedOnWeather(isSubscribedOnWeather)
-        .subscribedOnLiveUpdates(isSubscribedOnLiveUpdates)
-        .build();
   }
 }
