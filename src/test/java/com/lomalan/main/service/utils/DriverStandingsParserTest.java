@@ -21,7 +21,7 @@ class DriverStandingsParserTest {
     assertEquals(21, driverStandings.size());
     DriverStandings robertKubica = driverStandings.get(19);
     assertEquals(String.valueOf(0), robertKubica.getPoints());
-    assertEquals("KU", robertKubica.getDriver().getCode());
+    assertEquals("KUB", robertKubica.getDriver().getCode());
   }
 
   private String getJsonString() throws IOException {
