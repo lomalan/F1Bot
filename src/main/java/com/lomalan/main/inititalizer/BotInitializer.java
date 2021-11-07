@@ -1,6 +1,7 @@
 package com.lomalan.main.inititalizer;
 
 import com.lomalan.main.bot.SportNewsBot;
+import com.lomalan.main.configuration.BotConfig;
 import com.lomalan.main.rest.client.TelegramRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -39,6 +40,9 @@ public class BotInitializer {
   }
 
   private void setUpWebHook() {
+    if (!bot.getBotPath().contains("https")) {
+      return;
+    }
     HttpEntity<String> entity = client.setWebHook();
     log.info(entity.getBody());
   }
