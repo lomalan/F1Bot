@@ -39,7 +39,7 @@ public class LiveTimingService {
       return;
     }
     SessionInfo sessionInfo = liveTimingRestClient.getCurrentSessionInfo();
-    if (!sessionInfo.getStatus().equals("Complete") || !sessionInfo.getType().equals("Practice")) {
+    if (sessionInfo.getStatus().equals("Complete") || sessionInfo.getType().equals("Practice")) {
       return;
     }
     Optional<LiveTimingInfo> liveTimingInfo = liveTimingHtmlClient.getLiveTimingInfo();
@@ -49,7 +49,6 @@ public class LiveTimingService {
 
   private void processMessage(LiveTimingInfo timingInfo, List<TelegramUser> users) {
     String messageToExecute = constructMessage(timingInfo);
-    log.info(messageToExecute);
     executeUpdatedData(users, messageToExecute);
   }
 

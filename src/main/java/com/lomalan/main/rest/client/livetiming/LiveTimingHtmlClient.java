@@ -36,6 +36,7 @@ public class LiveTimingHtmlClient {
     try (WebClient webClient = new WebClient()) {
       setupWebClient(webClient);
       HtmlPage page = webClient.getPage(liveTimingUrl);
+      webClient.waitForBackgroundJavaScriptStartingBefore(10000);
       Pair<String, String> raceNameAndStatus = getRaceNameAndStatus(page);
       List<DriverInfo> driverInfoTwos = getDriversInfo(page);
       return Optional
@@ -65,7 +66,6 @@ public class LiveTimingHtmlClient {
     webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
     webClient.getOptions().setThrowExceptionOnScriptError(false);
     webClient.getOptions().setCssEnabled(false);
-    webClient.waitForBackgroundJavaScriptStartingBefore(10000);
   }
 
   private Pair<String, String> getRaceNameAndStatus(HtmlPage page) {
