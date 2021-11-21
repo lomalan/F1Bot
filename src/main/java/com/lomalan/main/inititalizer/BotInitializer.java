@@ -40,7 +40,7 @@ public class BotInitializer {
   }
 
   private void setUpWebHook() {
-    if (!bot.getBotPath().contains(SECRET_PLACEHOLDER)) {
+    if (bot.getBotPath().equals(SECRET_PLACEHOLDER)) {
       return;
     }
     HttpEntity<String> entity = client.setWebHook();
