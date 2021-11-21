@@ -1,7 +1,6 @@
 package com.lomalan.main.inititalizer;
 
 import com.lomalan.main.bot.SportNewsBot;
-import com.lomalan.main.configuration.BotConfig;
 import com.lomalan.main.rest.client.TelegramRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -22,6 +21,7 @@ public class BotInitializer {
 
   private final SportNewsBot bot;
   private final TelegramRestClient client;
+  private static final String SECRET_PLACEHOLDER = "<secret>";
 
   public BotInitializer(SportNewsBot bot, TelegramRestClient client) {
     this.bot = bot;
@@ -40,7 +40,7 @@ public class BotInitializer {
   }
 
   private void setUpWebHook() {
-    if (!bot.getBotPath().contains("https")) {
+    if (bot.getBotPath().equals(SECRET_PLACEHOLDER)) {
       return;
     }
     HttpEntity<String> entity = client.setWebHook();
