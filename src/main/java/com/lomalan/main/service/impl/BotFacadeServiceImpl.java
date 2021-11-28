@@ -36,9 +36,10 @@ public class BotFacadeServiceImpl implements BotFacadeService {
   }
 
   private Optional<PartialBotApiMethod<Message>> processBotApiMethods(Update update) {
-    return botApiMethods.stream().map(s -> s.getPartialBotApiMethod(update))
-        .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
-        .findFirst();
+    return botApiMethods.stream()
+            .map(s -> s.getPartialBotApiMethod(update))
+            .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
+            .findFirst();
   }
 
   private Optional<String> processMessageServices(Update update) {

@@ -24,7 +24,7 @@ public class RaceServiceImpl implements PartialBotMethodService {
   }
 
   private Optional<PartialBotApiMethod<Message>> getRaceData(Update update) {
-    if (update.getMessage().getText().equals(BotCommands.NEXT_RACE.getCommandName())) {
+    if (BotCommands.NEXT_RACE.getCommandName().equals(update.getMessage().getText())) {
       return Optional.of(scheduleService.getNextRace(update));
     }
     return Optional.empty();

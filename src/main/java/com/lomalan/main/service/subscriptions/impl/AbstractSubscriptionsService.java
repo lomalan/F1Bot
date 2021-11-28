@@ -55,7 +55,7 @@ public abstract class AbstractSubscriptionsService implements SubscriptionsServi
 
   @Override
   public String subscribe(Update update) {
-    if (!update.getMessage().getText().equals(getCommandName().getSubCommandName())) {
+    if (!getCommandName().getSubCommandName().equals(update.getMessage().getText())) {
       return StringUtils.EMPTY;
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractSubscriptionsService implements SubscriptionsServi
 
   @Override
   public String unsubscribe(Update update) {
-    if (!update.getMessage().getText().equals(getCommandName().getUnsubCommandName())) {
+    if (!getCommandName().getUnsubCommandName().equals(update.getMessage().getText())) {
       return StringUtils.EMPTY;
     }
 
