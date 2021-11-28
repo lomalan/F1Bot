@@ -25,7 +25,7 @@ public class DriversServiceImpl implements DriversService, MessageService {
 
   @Override
   public Optional<String> processMessage(Update update) {
-    if (!update.getMessage().getText().equals(BotCommands.DRIVERS_STANDING.getCommandName())) {
+    if (!BotCommands.DRIVERS_STANDING.getCommandName().equals(update.getMessage().getText())) {
       return Optional.empty();
     }
     return Optional.of(MessageConstructor.constructStandingsMessage(getCurrentSeasonStandings()));
