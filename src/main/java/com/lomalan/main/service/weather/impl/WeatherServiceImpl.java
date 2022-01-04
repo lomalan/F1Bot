@@ -2,8 +2,8 @@ package com.lomalan.main.service.weather.impl;
 
 import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
-import com.lomalan.main.rest.client.f1.F1SchedulesRestClient;
-import com.lomalan.main.rest.client.weather.WeatherRestClient;
+import com.lomalan.main.rest.client.f1.F1SchedulesClient;
+import com.lomalan.main.rest.client.weather.WeatherClient;
 import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
 import com.lomalan.main.service.impl.MessageConstructor;
@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class WeatherServiceImpl {
 
-  private final F1SchedulesRestClient f1SchedulesRestClient;
-  private final WeatherRestClient weatherRestClient;
+  private final F1SchedulesClient f1SchedulesRestClient;
+  private final WeatherClient weatherRestClient;
   private final TelegramUserRepository userRepository;
   private final MessageExecutor messageExecutor;
 

@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class TelegramRestClient {
+public class TelegramClient {
 
   private final RestTemplate restTemplate;
   private final BotConfig config;
@@ -21,7 +21,7 @@ public class TelegramRestClient {
 
   private static final String WEB_HOOK_ENDPOINT = "/setWebHook";
 
-  public TelegramRestClient(RestTemplate restTemplate, BotConfig config) {
+  public TelegramClient(RestTemplate restTemplate, BotConfig config) {
     this.restTemplate = restTemplate;
     this.config = config;
   }

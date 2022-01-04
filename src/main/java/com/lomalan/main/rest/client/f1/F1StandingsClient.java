@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Component
 @AllArgsConstructor
-public class F1StandingsRestClient {
+public class F1StandingsClient {
 
   private static final String CURRENT_SEASON_NEXT_RACE_ENDPOINT = "current/driverStandings.json";
 
