@@ -6,6 +6,8 @@
 4. mvn clean package docker:build
 5. docker-compose up f1bot from src/main/docker/local directory
 
+For enable possibility to get live data please download repo: https://github.com/lomalan/F1LiveTiming
+
 
 ####Other notes:
 To use weather service you need to create profile on https://api.openweathermap.org
