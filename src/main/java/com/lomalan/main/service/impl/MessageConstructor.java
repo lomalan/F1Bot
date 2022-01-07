@@ -3,8 +3,6 @@ package com.lomalan.main.service.impl;
 import com.lomalan.main.Emojis;
 import com.lomalan.main.rest.model.f1.DriverStandings;
 import com.lomalan.main.rest.model.f1.Race;
-import com.lomalan.main.rest.model.livetiming.DriverInfo;
-import com.lomalan.main.rest.model.livetiming.LiveTimingInfo;
 import com.lomalan.main.rest.model.weather.Weather;
 import com.lomalan.main.rest.model.weather.WeatherInfo;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
@@ -34,21 +32,6 @@ public class MessageConstructor {
     return getWeatherInfo(response);
   }
 
-  public static String constructMessage(LiveTimingInfo liveTimingInfo) {
-    return  liveTimingInfo.getRaceName().concat("\n\n")
-        .concat(liveTimingInfo.getLapStatus()).concat("\n\n")
-        .concat(liveTimingInfo.getDriverInfo().stream()
-            .map(MessageConstructor::processDriverData)
-            .collect(Collectors.joining("\n")));
-  }
-
-
-  private static String processDriverData(DriverInfo info) {
-    return info.getPosition().concat(". ")
-        .concat(info.getName()).concat(" ")
-        .concat(info.getGap().equals("") ? "+0.000" : info.getGap()).concat(" ")
-        .concat(info.getStops());
-  }
   private static String getWeatherInfo(WeatherResponse response) {
     Weather weather = response.getWeather().get(0);
     String cityName = response.getCityName();

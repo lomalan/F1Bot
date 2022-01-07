@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class WeatherRestClient {
+public class WeatherClient {
 
   private final RestTemplate restTemplate;
 
@@ -20,7 +20,7 @@ public class WeatherRestClient {
   @Value("${weather.api.key}")
   private String weatherApiKey;
 
-  public WeatherRestClient(RestTemplate restTemplate) {
+  public WeatherClient(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
@@ -31,7 +31,8 @@ public class WeatherRestClient {
         .queryParam("units", "metric");
     HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
     ResponseEntity<WeatherResponse> weatherResponse =
-        restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, WeatherResponse.class);
+        restTemplate.exchange(builder.toUriString()
+            .replaceAll("%20", " "), HttpMethod.GET, entity, WeatherResponse.class);
 
     return weatherResponse.getBody();
   }

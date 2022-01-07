@@ -43,8 +43,7 @@ public class SportNewsBot extends TelegramWebhookBot {
       try {
         processUpdate(update);
       } catch (TelegramApiException e) {
-        log.error(e.getMessage());
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
       }
     return null;
   }

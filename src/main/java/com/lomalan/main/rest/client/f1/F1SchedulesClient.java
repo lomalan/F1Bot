@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
-public class F1SchedulesRestClient {
+public class F1SchedulesClient {
 
   private final RestTemplate restTemplate;
 
@@ -24,7 +24,7 @@ public class F1SchedulesRestClient {
   private static final String CURRENT_SEASON_NEXT_RACE_ENDPOINT = "current/next.json";
 
 
-  public F1SchedulesRestClient(RestTemplate restTemplate) {
+  public F1SchedulesClient(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 

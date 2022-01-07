@@ -1,7 +1,7 @@
 package com.lomalan.main.service.drivers.impl;
 
 import com.lomalan.main.bot.commands.BotCommands;
-import com.lomalan.main.rest.client.f1.F1StandingsRestClient;
+import com.lomalan.main.rest.client.f1.F1StandingsClient;
 import com.lomalan.main.rest.model.f1.DriverStandings;
 import com.lomalan.main.service.MessageService;
 import com.lomalan.main.service.drivers.DriversService;
@@ -21,7 +21,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 public class DriversServiceImpl implements DriversService, MessageService {
 
-  private final F1StandingsRestClient f1StandingsRestClient;
+  private final F1StandingsClient f1StandingsRestClient;
 
   @Override
   public Optional<String> processMessage(Update update) {
