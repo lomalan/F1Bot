@@ -1,5 +1,6 @@
 package com.lomalan.main.service;
 
+import com.lomalan.main.model.MessageContainer;
 import java.util.Optional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -8,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 public interface MessageService {
 
-  Optional<String> processMessage(Update update);
+  Optional<MessageContainer> processMessage(Update update);
 
   /**
    * Returns command which was used to execute service

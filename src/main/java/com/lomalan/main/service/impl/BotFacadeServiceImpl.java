@@ -1,9 +1,9 @@
 package com.lomalan.main.service.impl;
 
 import com.lomalan.main.bot.commands.BotCommands;
+import com.lomalan.main.model.MessageContainer;
 import com.lomalan.main.service.BotFacadeService;
 import com.lomalan.main.service.MessageService;
-import com.lomalan.main.service.PartialBotMethodService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -25,36 +26,42 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @AllArgsConstructor
 public class BotFacadeServiceImpl implements BotFacadeService {
 
-  private final List<PartialBotMethodService> botApiMethods;
   private final List<MessageService> messageServices;
 
   @Override
   public PartialBotApiMethod<Message> processUpdateWithMessage(Update update) {
-    return processBotApiMethods(update)
-            .orElse(sendMessage(update, processMessageServices(update)
-                .orElse("Please use the main menu")));
+    return sendBotApiMethod(update, processMessageServices(update)
+                .orElse(new MessageContainer("Please use the main menu")));
   }
-
-  private Optional<PartialBotApiMethod<Message>> processBotApiMethods(Update update) {
-    return botApiMethods.stream()
-            .map(s -> s.getPartialBotApiMethod(update))
-            .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
-            .findFirst();
-  }
-
-  private Optional<String> processMessageServices(Update update) {
+  
+  private Optional<MessageContainer> processMessageServices(Update update) {
     return messageServices.stream()
         .map(messageService -> messageService.processMessage(update))
         .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
         .findFirst();
   }
 
-  private SendMessage sendMessage(Update update, String text) {
+  private PartialBotApiMethod<Message> sendBotApiMethod(Update update, MessageContainer container) {
+    return container.getPhoto() != null
+        ? sendPhoto(update, container)
+        : sendMessage(update, container);
+  }
+
+  private SendMessage sendMessage(Update update, MessageContainer container) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setReplyMarkup(constructMarkup(update));
     sendMessage.setChatId(update.getMessage().getChatId().toString());
-    sendMessage.setText(text);
+    sendMessage.setText(container.getText());
     return sendMessage;
+  }
+
+  private SendPhoto sendPhoto(Update update, MessageContainer container) {
+    SendPhoto sendPhoto = new SendPhoto();
+    sendPhoto.setReplyMarkup(constructMarkup(update));
+    sendPhoto.setChatId(update.getMessage().getChatId().toString());
+    sendPhoto.setPhoto(container.getPhoto());
+    sendPhoto.setCaption(container.getText());
+    return sendPhoto;
   }
 
   private ReplyKeyboardMarkup constructMarkup(Update update) {

@@ -4,6 +4,7 @@ import static com.lomalan.main.service.subscriptions.util.SubUtils.prepareUserTo
 
 import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
+import com.lomalan.main.model.MessageContainer;
 import com.lomalan.main.service.MessageService;
 import com.lomalan.main.service.subscriptions.SubscriptionsService;
 import com.lomalan.main.service.subscriptions.model.CommandNames;
@@ -34,16 +35,16 @@ public abstract class AbstractSubscriptionsService implements SubscriptionsServi
   abstract boolean isUserSubscribed(TelegramUser user);
 
   @Override
-  public Optional<String> processMessage(Update update) {
+  public Optional<MessageContainer> processMessage(Update update) {
     String subscribeResult = subscribe(update);
     String unsubscribeResult = unsubscribe(update);
     if (subscribeResult.isEmpty() && unsubscribeResult.isEmpty()) {
       return Optional.empty();
     }
     if (subscribeResult.isEmpty()) {
-      return Optional.of(unsubscribeResult);
+      return Optional.of(new MessageContainer(unsubscribeResult));
     }
-    return Optional.of(subscribeResult);
+    return Optional.of(new MessageContainer(subscribeResult));
   }
 
   public String getCurrentCommand(Update update) {

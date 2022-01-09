@@ -1,6 +1,7 @@
 package com.lomalan.main.service.drivers.impl;
 
 import com.lomalan.main.bot.commands.BotCommands;
+import com.lomalan.main.model.MessageContainer;
 import com.lomalan.main.rest.client.f1.F1StandingsClient;
 import com.lomalan.main.rest.model.f1.DriverStandings;
 import com.lomalan.main.service.MessageService;
@@ -24,11 +25,11 @@ public class DriversServiceImpl implements DriversService, MessageService {
   private final F1StandingsClient f1StandingsRestClient;
 
   @Override
-  public Optional<String> processMessage(Update update) {
+  public Optional<MessageContainer> processMessage(Update update) {
     if (!BotCommands.DRIVERS_STANDING.getCommandName().equals(update.getMessage().getText())) {
       return Optional.empty();
     }
-    return Optional.of(MessageConstructor.constructStandingsMessage(getCurrentSeasonStandings()));
+    return Optional.of(new MessageContainer(MessageConstructor.constructStandingsMessage(getCurrentSeasonStandings())));
   }
 
   @Override
