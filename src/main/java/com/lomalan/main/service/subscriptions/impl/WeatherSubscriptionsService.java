@@ -24,22 +24,14 @@ public class WeatherSubscriptionsService extends AbstractSubscriptionsService {
   }
 
   @Override
-  void subUser(TelegramUser user) {
+  String subUser(TelegramUser user) {
     user.setSubscribedOnWeather(true);
-  }
-
-  @Override
-  void unsubUser(TelegramUser user) {
-    user.setSubscribedOnWeather(false);
-  }
-
-  @Override
-  String getSubMessage() {
     return SUB_MESSAGE;
   }
 
   @Override
-  String getUnsubMessage() {
+  String unsubUser(TelegramUser user) {
+    user.setSubscribedOnWeather(false);
     return UNSUB_MESSAGE;
   }
 

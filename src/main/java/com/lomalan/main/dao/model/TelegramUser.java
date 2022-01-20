@@ -1,5 +1,6 @@
 package com.lomalan.main.dao.model;
 
+import com.lomalan.main.bot.state.BotState;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -19,4 +20,5 @@ public class TelegramUser {
   private String chatId;
   private boolean subscribedOnWeather;
   private boolean subscribedOnLiveUpdates;
+  private BotState state;
 }

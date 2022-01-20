@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -42,6 +44,10 @@ public class BotConfig {
 
   @Bean
   public MongoTemplate mongoTemplate() {
-    return new MongoTemplate(mongo(), "test");
+    MongoTemplate template = new MongoTemplate(mongo(), "test");
+    template
+        .indexOps("suggestion")
+        .ensureIndex(new Index("suggestionText", Direction.ASC).unique());
+    return template;
   }
 }

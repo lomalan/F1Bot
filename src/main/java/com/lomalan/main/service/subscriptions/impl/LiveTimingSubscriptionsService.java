@@ -24,22 +24,14 @@ public class LiveTimingSubscriptionsService extends AbstractSubscriptionsService
   }
 
   @Override
-  void subUser(TelegramUser user) {
+  String subUser(TelegramUser user) {
     user.setSubscribedOnLiveUpdates(true);
-  }
-
-  @Override
-  void unsubUser(TelegramUser user) {
-    user.setSubscribedOnLiveUpdates(false);
-  }
-
-  @Override
-  String getSubMessage() {
     return SUB_MESSAGE;
   }
 
   @Override
-  String getUnsubMessage() {
+  String unsubUser(TelegramUser user) {
+    user.setSubscribedOnLiveUpdates(false);
     return UNSUB_MESSAGE;
   }
 

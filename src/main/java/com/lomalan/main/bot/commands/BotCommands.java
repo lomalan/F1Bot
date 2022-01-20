@@ -6,7 +6,9 @@ public enum BotCommands {
   CURRENT_WEATHER("Subscribe on weather"),
   UNSUB_WEATHER("Unsubscribe from weather"),
   SUB_LIVE("Subscribe on live timing"),
-  UNSUB_LIVE("Unsubscribe from live timing");
+  UNSUB_LIVE("Unsubscribe from live timing"),
+  SUGGESTION("Suggestion to improve bot"),
+  CANCEL("Cancel");
 
   private final String commandName;
 
