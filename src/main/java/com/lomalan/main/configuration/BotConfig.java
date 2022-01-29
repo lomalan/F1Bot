@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
@@ -24,8 +26,6 @@ public class BotConfig {
   private String webHookUrl;
   @Value("${mongo.host}")
   private String mongoHost;
-  @Value("${mongo.port}")
-  private String mongoPort;
 
   @Bean
   public RestTemplate restTemplate() {
@@ -34,7 +34,7 @@ public class BotConfig {
 
   @Bean
   public MongoClient mongo() {
-    ConnectionString connectionString = new ConnectionString(mongoHost + ":" + mongoPort + "/test");
+    ConnectionString connectionString = new ConnectionString(mongoHost);
     MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
         .applyConnectionString(connectionString)
         .build();
@@ -44,6 +44,10 @@ public class BotConfig {
 
   @Bean
   public MongoTemplate mongoTemplate() {
-    return new MongoTemplate(mongo(), "test");
+    MongoTemplate template = new MongoTemplate(mongo(), "test");
+    template
+        .indexOps("suggestion")
+        .ensureIndex(new Index("suggestionText", Direction.ASC).unique());
+    return template;
   }
 }

@@ -1,10 +1,10 @@
 package com.lomalan.main.service.schedule;
 
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import com.lomalan.main.model.MessageContainer;
+import java.util.Optional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface ScheduleService {
 
-  PartialBotApiMethod<Message> getNextRace(Update update);
+  Optional<MessageContainer> getNextRace(Update update);
 }

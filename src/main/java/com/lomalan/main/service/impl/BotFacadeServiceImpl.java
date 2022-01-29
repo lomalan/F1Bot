@@ -1,23 +1,25 @@
 package com.lomalan.main.service.impl;
 
-import com.lomalan.main.bot.commands.BotCommands;
+import static com.lomalan.main.service.subscriptions.util.TelegramUserConstructor.prepareUserToSave;
+
+import com.lomalan.main.bot.state.BotState;
+import com.lomalan.main.dao.model.TelegramUser;
+import com.lomalan.main.dao.repository.TelegramUserRepository;
+import com.lomalan.main.model.MessageContainer;
 import com.lomalan.main.service.BotFacadeService;
+import com.lomalan.main.service.BotMenuService;
 import com.lomalan.main.service.MessageService;
-import com.lomalan.main.service.PartialBotMethodService;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 
 @Service
@@ -25,49 +27,57 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @AllArgsConstructor
 public class BotFacadeServiceImpl implements BotFacadeService {
 
-  private final List<PartialBotMethodService> botApiMethods;
   private final List<MessageService> messageServices;
+  private final TelegramUserRepository userRepository;
+  private final BotMenuService menuService;
 
   @Override
   public PartialBotApiMethod<Message> processUpdateWithMessage(Update update) {
-    return processBotApiMethods(update)
-            .orElse(sendMessage(update, processMessageServices(update)
-                .orElse("Please use the main menu")));
+    String chatId = update.getMessage().getChatId().toString();
+    TelegramUser telegramUser = processUserFromUpdate(update, chatId);
+    return sendBotApiMethod(update, getMessageIfNotEmpty(processMessageServices(update, telegramUser)), telegramUser);
   }
 
-  private Optional<PartialBotApiMethod<Message>> processBotApiMethods(Update update) {
-    return botApiMethods.stream()
-            .map(s -> s.getPartialBotApiMethod(update))
-            .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
-            .findFirst();
+  private MessageContainer getMessageIfNotEmpty(Optional<MessageContainer> optionalMessageContainer) {
+    return optionalMessageContainer
+        .orElse(new MessageContainer("Please use the main menu"));
   }
 
-  private Optional<String> processMessageServices(Update update) {
+  private TelegramUser processUserFromUpdate(Update update, String chatId) {
+    TelegramUser user = userRepository.findByChatId(chatId);
+    if (user == null) {
+      return userRepository.save(prepareUserToSave(update.getMessage().getFrom(), BotState.MAIN_MENU));
+    }
+    return user;
+  }
+
+  private Optional<MessageContainer> processMessageServices(Update update, TelegramUser user) {
     return messageServices.stream()
-        .map(messageService -> messageService.processMessage(update))
+        .map(messageService -> messageService.processMessage(update, user))
         .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
         .findFirst();
   }
 
-  private SendMessage sendMessage(Update update, String text) {
+  private PartialBotApiMethod<Message> sendBotApiMethod(Update update, MessageContainer container, TelegramUser user) {
+    return container.getPhoto() != null
+        ? sendPhoto(update, container, user)
+        : sendMessage(update, container, user);
+  }
+
+  private SendMessage sendMessage(Update update, MessageContainer container, TelegramUser user) {
     SendMessage sendMessage = new SendMessage();
-    sendMessage.setReplyMarkup(constructMarkup(update));
+    sendMessage.setReplyMarkup(menuService.constructMenu(update, user));
     sendMessage.setChatId(update.getMessage().getChatId().toString());
-    sendMessage.setText(text);
+    sendMessage.setText(container.getText());
     return sendMessage;
   }
 
-  private ReplyKeyboardMarkup constructMarkup(Update update) {
-    List<String> listToFilterOut = messageServices.stream()
-        .map(service -> service.getCurrentCommand(update))
-        .collect(Collectors.toList());
-
-    return KeyboardCreator
-        .constructCustomMenuKeyBoard(getAvailableCommands(String.join(StringUtils.SPACE, listToFilterOut)));
-  }
-
-  private List<BotCommands> getAvailableCommands(String commandName) {
-    return Arrays.stream(BotCommands.values()).filter(c -> !commandName.contains(c.getCommandName()))
-        .collect(Collectors.toList());
+  private SendPhoto sendPhoto(Update update, MessageContainer container, TelegramUser user) {
+    SendPhoto sendPhoto = new SendPhoto();
+    sendPhoto.setReplyMarkup(menuService.constructMenu(update, user));
+    sendPhoto.setChatId(update.getMessage().getChatId().toString());
+    sendPhoto.setPhoto(container.getPhoto());
+    sendPhoto.setCaption(container.getText());
+    return sendPhoto;
   }
 }

@@ -9,6 +9,7 @@ import com.lomalan.main.rest.model.weather.WeatherResponse;
 import com.lomalan.main.service.impl.MessageConstructor;
 import com.lomalan.main.service.message.MessageExecutor;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,15 +31,20 @@ public class WeatherServiceImpl {
   @Scheduled(cron = "0 0/30 8-18 * * FRI-SUN")
   public void scheduleWeatherUpdates() {
     log.info("Start to search subscribers on weather updates.... ");
-    List<TelegramUser> telegramUsers = userRepository.findAll();
+    List<TelegramUser> telegramUsers = getWeatherSubscribers();
     if (telegramUsers.isEmpty()) {
       return;
     }
     Race nextRace = f1SchedulesRestClient.getNextRace();
     String cityName = nextRace.getCircuit().getLocation().getLocality();
     WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(cityName);
-    telegramUsers.stream()
-        .filter(TelegramUser::isSubscribedOnWeather)
+    telegramUsers
         .forEach(user -> messageExecutor.executeMessage(user, MessageConstructor.constructWeatherMessage(weather)));
+  }
+
+  private List<TelegramUser> getWeatherSubscribers() {
+    return userRepository.findAll().stream()
+        .filter(TelegramUser::isSubscribedOnWeather)
+        .collect(Collectors.toList());
   }
 }
