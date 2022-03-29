@@ -7,6 +7,8 @@ public enum BotCommands {
   UNSUB_WEATHER("Unsubscribe from weather"),
   SUB_LIVE("Subscribe on live timing"),
   UNSUB_LIVE("Unsubscribe from live timing"),
+  SUB_TWITTER("Subscribe on twitter updates"),
+  UNSUB_TWITTER("Unsubscribe from twitter updates"),
   SUGGESTION("Suggestion to improve bot"),
   CANCEL("Cancel");
 

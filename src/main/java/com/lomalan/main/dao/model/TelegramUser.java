@@ -20,5 +20,6 @@ public class TelegramUser {
   private String chatId;
   private boolean subscribedOnWeather;
   private boolean subscribedOnLiveUpdates;
+  private boolean subscribedOnTwitterUpdates;
   private BotState state;
 }
