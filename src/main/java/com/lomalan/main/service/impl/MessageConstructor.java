@@ -87,6 +87,9 @@ public class MessageConstructor {
 
   private static String formatTimeAndDate(LocalDateTime raceDateTime) {
     ZoneId uaTimeZone = ZoneId.of("Europe/Kiev");
-    return raceDateTime.atZone(uaTimeZone).toLocalTime().toString();
+    ZoneId utc = ZoneId.of("UTC");
+
+    return raceDateTime.atZone(utc).withZoneSameInstant(uaTimeZone)
+        .toLocalTime().toString();
   }
 }
