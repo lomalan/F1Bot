@@ -6,8 +6,8 @@ import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.weather.Weather;
 import com.lomalan.main.rest.model.weather.WeatherInfo;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 public class MessageConstructor {
 
   private static final String CELSIUS_SIGN = "\u00B0C";
+  private static final String DOUBLE_NEW_LINE = "\n\n";
 
   private MessageConstructor() {
   }
@@ -36,7 +37,7 @@ public class MessageConstructor {
     Weather weather = response.getWeather().get(0);
     String cityName = response.getCityName();
     WeatherInfo weatherInfo = response.getWeatherInfo();
-    return "Current weather in " + cityName +  "\n\n"
+    return String.format("%s %s%s", "Current weather in ", cityName, DOUBLE_NEW_LINE)
         + findEmojiForString(weather.getMain()) + "(" + weather.getDescription() +")" + "\n"
         + "Temperature: " + weatherInfo.getTemp() + CELSIUS_SIGN + "\n"
         + "Feels like: " + weatherInfo.getFeelTemp() + CELSIUS_SIGN + "\n"
@@ -61,10 +62,11 @@ public class MessageConstructor {
   }
 
   private static String getRaceInfo(Race race) {
-    return resolveTitle(race) + "\n\n"
+    LocalDateTime raceDateTime = race.getRaceDateTime();
+    return resolveTitle(race)
         + "Race date: " + race.getDate() + "\n\n"
-        + Emojis.GB.getUnicodeString() + "London time: " + StringUtils.substringBefore(race.getTime(), ":00Z") + "\n\n"
-        + Emojis.UKRAINE.getUnicodeString() + "Kyiv time: " + formatTimeAndDate(race.getDate(), race.getTime()) + "\n\n"
+        + Emojis.GB.getUnicodeString() + "London time: " + raceDateTime.toLocalTime().toString() + "\n\n"
+        + Emojis.UKRAINE.getUnicodeString() + "Kyiv time: " + formatTimeAndDate(raceDateTime) + "\n\n"
         + "City: " + race.getCircuit().getLocation().getLocality() + "\n\n"
         + "Circuit info: " + race.getCircuit().getUrl() + "\n\n"
         + "Race wiki info: " + race.getUrl();
@@ -72,7 +74,7 @@ public class MessageConstructor {
 
   private static String resolveTitle(Race race) {
     String emojiUnicodeValue = findEmojiForString(race.getCircuit().getLocation().getCountry());
-    return emojiUnicodeValue + race.getRaceName() + emojiUnicodeValue;
+    return String.format("%s%s%s%s", emojiUnicodeValue, race.getRaceName(), emojiUnicodeValue, "\n\n");
   }
 
   private static String findEmojiForString(String value) {
@@ -83,10 +85,8 @@ public class MessageConstructor {
         .orElse(Emojis.F1.getUnicodeString());
   }
 
-  private static String formatTimeAndDate(String date, String time) {
-    ZonedDateTime zonedDateTime = ZonedDateTime.parse(date + "T" + time);
-
+  private static String formatTimeAndDate(LocalDateTime raceDateTime) {
     ZoneId uaTimeZone = ZoneId.of("Europe/Kiev");
-    return zonedDateTime.withZoneSameInstant(uaTimeZone).toLocalDateTime().toLocalTime().toString();
+    return raceDateTime.atZone(uaTimeZone).toLocalTime().toString();
   }
 }

@@ -36,6 +36,9 @@ public class WeatherServiceImpl {
       return;
     }
     Race nextRace = f1SchedulesRestClient.getNextRace();
+    if (!nextRace.isValidDateForWeatherPosting()) {
+      return;
+    }
     String cityName = nextRace.getCircuit().getLocation().getLocality();
     WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(cityName);
     telegramUsers
