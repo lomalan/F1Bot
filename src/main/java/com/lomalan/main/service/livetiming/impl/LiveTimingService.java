@@ -4,6 +4,7 @@ import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
 import com.lomalan.main.rest.client.f1.F1SchedulesClient;
 import com.lomalan.main.rest.client.livetiming.LiveTimingClient;
+import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.service.message.MessageExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,11 @@ public class LiveTimingService {
 
   @Scheduled(cron = "0 0/5 * * * SAT-SUN")
   public void getLiveDriverInfo() {
-    if (!f1SchedulesRestClient.getNextRace().isValidDateForLiveTimingPosting()) {
+    Race nextRace = f1SchedulesRestClient.getNextRace();
+
+    if (!nextRace.isValidDateForLiveTimingPosting() 
+        && !nextRace.getQuali().isValidDateForLiveTimingPosting()
+        && (nextRace.getSprint() == null || nextRace.getSprint().isValidDateForLiveTimingPosting())) {
       return;
     }
     log.info("Start to search live subs.....");

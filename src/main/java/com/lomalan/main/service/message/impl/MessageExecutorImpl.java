@@ -2,8 +2,6 @@ package com.lomalan.main.service.message.impl;
 
 import com.lomalan.main.bot.SportNewsBot;
 import com.lomalan.main.dao.model.TelegramUser;
-import com.lomalan.main.rest.model.weather.WeatherResponse;
-import com.lomalan.main.service.impl.MessageConstructor;
 import com.lomalan.main.service.message.MessageExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

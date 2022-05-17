@@ -36,7 +36,9 @@ public class WeatherServiceImpl {
       return;
     }
     Race nextRace = f1SchedulesRestClient.getNextRace();
-    if (!nextRace.isValidDateForWeatherPosting()) {
+    if (!nextRace.isValidDateForWeatherPosting() 
+        && !nextRace.getQuali().isValidDateForWeatherPosting() 
+        && (nextRace.getSprint() == null || !nextRace.getSprint().isValidDateForWeatherPosting())) {
       return;
     }
     String cityName = nextRace.getCircuit().getLocation().getLocality();

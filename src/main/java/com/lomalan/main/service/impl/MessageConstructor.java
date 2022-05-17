@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,14 +63,36 @@ public class MessageConstructor {
   }
 
   private static String getRaceInfo(Race race) {
-    LocalDateTime raceDateTime = race.getRaceDateTime();
-    return resolveTitle(race)
-        + "Race date: " + race.getDate() + "\n\n"
-        + Emojis.GB.getUnicodeString() + "London time: " + raceDateTime.toLocalTime().toString() + "\n\n"
-        + Emojis.UKRAINE.getUnicodeString() + "Kyiv time: " + formatTimeAndDate(raceDateTime) + "\n\n"
-        + "City: " + race.getCircuit().getLocation().getLocality() + "\n\n"
-        + "Circuit info: " + race.getCircuit().getUrl() + "\n\n"
-        + "Race wiki info: " + race.getUrl();
+    Map<String, LocalDateTime> eventMap = getEventMap(race);
+    
+    return resolveTitle(race)      
+      + "Race date: " + race.getDate() + "\n\n"
+      + parseEvents(eventMap)
+      + "City: " + race.getCircuit().getLocation().getLocality() + "\n\n"
+      + "Circuit info: " + race.getCircuit().getUrl() + "\n\n"
+      + "Race wiki info: " + race.getUrl();
+  }
+
+  private static String parseEvents(Map<String, LocalDateTime> eventMap) {
+    return eventMap.entrySet().stream()
+      .map(entry -> getUkranianTimeForEvent(entry.getValue(), entry.getKey()))
+      .collect(Collectors.joining("\n\n")); 
+  }
+
+  private static Map<String, LocalDateTime> getEventMap(Race race) {
+    return Map.of("First Practice", race.getFirstPractice().getDateTime(),
+    "Second Practice", race.getSecondPractice().getDateTime(),
+    "Third Practice", race.getThirdPractice() == null ? null : race.getThirdPractice().getDateTime(),
+    "Qualification", race.getQuali().getDateTime(),
+    "Sprint", race.getSprint() == null ? null : race.getSprint().getDateTime(),
+    "Race", race.getDateTime())
+    .entrySet().stream()
+    .filter(entry -> entry.getValue() != null)
+    .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+  }
+
+  private static String getUkranianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
+    return Emojis.UKRAINE.getUnicodeString() + eventName + " time: " + formatTimeAndDate(eventDateTime);
   }
 
   private static String resolveTitle(Race race) {

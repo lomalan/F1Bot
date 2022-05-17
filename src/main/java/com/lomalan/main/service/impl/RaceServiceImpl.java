@@ -7,13 +7,11 @@ import com.lomalan.main.service.MessageService;
 import com.lomalan.main.service.schedule.ScheduleService;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class RaceServiceImpl implements MessageService {
 
   private final ScheduleService scheduleService;

@@ -16,7 +16,7 @@
 	<description>Formula 1 Telegram Bot</description>
 
 	<properties>
-		<java.version>8</java.version>
+		<java.version>11</java.version>
 		<docker.image.prefix>f1bot</docker.image.prefix>
 		<docker.image.name>${project.artifactId}</docker.image.name>
 	</properties>
