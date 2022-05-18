@@ -9,6 +9,7 @@ import com.lomalan.main.rest.model.weather.WeatherResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -68,7 +69,7 @@ public class MessageConstructor {
     
     return resolveTitle(race)      
       + "Race date: " + race.getDate() + "\n\n"
-      + parseEvents(eventMap)
+      + parseEvents(eventMap) + "\n\n"
       + "City: " + race.getCircuit().getLocation().getLocality() + "\n\n"
       + "Circuit info: " + race.getCircuit().getUrl() + "\n\n"
       + "Race wiki info: " + race.getUrl();
@@ -81,15 +82,15 @@ public class MessageConstructor {
   }
 
   private static Map<String, LocalDateTime> getEventMap(Race race) {
-    return Map.of("First Practice", race.getFirstPractice().getDateTime(),
-    "Second Practice", race.getSecondPractice().getDateTime(),
-    "Third Practice", race.getThirdPractice() == null ? LocalDateTime.MIN : race.getThirdPractice().getDateTime(),
-    "Qualification", race.getQuali().getDateTime(),
-    "Sprint", race.getSprint() == null ?  LocalDateTime.MIN : race.getSprint().getDateTime(),
-    "Race", race.getDateTime())
-    .entrySet().stream()
-    .filter(entry -> !entry.getValue().equals(LocalDateTime.MIN))
-    .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    return new LinkedHashMap<>(Map.of("First Practice", race.getFirstPractice().getDateTime(),
+            "Second Practice", race.getSecondPractice().getDateTime(),
+            "Third Practice", race.getThirdPractice() == null ? LocalDateTime.MIN : race.getThirdPractice().getDateTime(),
+            "Qualification", race.getQuali().getDateTime(),
+            "Sprint", race.getSprint() == null ?  LocalDateTime.MIN : race.getSprint().getDateTime(),
+            "Race", race.getDateTime()))
+        .entrySet().stream()
+        .filter(entry -> !entry.getValue().equals(LocalDateTime.MIN))
+        .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
   private static String getUkrainianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
