@@ -9,10 +9,10 @@ import com.lomalan.main.rest.model.weather.WeatherResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -82,15 +82,18 @@ public class MessageConstructor {
   }
 
   private static Map<String, LocalDateTime> getEventMap(Race race) {
-    return new LinkedHashMap<>(Map.of("First Practice", race.getFirstPractice().getDateTime(),
-            "Second Practice", race.getSecondPractice().getDateTime(),
-            "Third Practice", race.getThirdPractice() == null ? LocalDateTime.MIN : race.getThirdPractice().getDateTime(),
-            "Qualification", race.getQuali().getDateTime(),
-            "Sprint", race.getSprint() == null ?  LocalDateTime.MIN : race.getSprint().getDateTime(),
-            "Race", race.getDateTime()))
-        .entrySet().stream()
-        .filter(entry -> !entry.getValue().equals(LocalDateTime.MIN))
-        .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+    HashMap<String, LocalDateTime> eventToTimeMap = new LinkedHashMap<>();
+    eventToTimeMap.put("First Practice", LocalDateTime.now());
+    eventToTimeMap.put("Second Practice", LocalDateTime.now());
+    if (race.getThirdPractice() != null) {
+      eventToTimeMap.put("Third Practice", LocalDateTime.now());
+    }
+    eventToTimeMap.put("Qualification", LocalDateTime.now());
+    if (race.getSprint() != null) {
+      eventToTimeMap.put("Sprint", LocalDateTime.now());
+    }
+    eventToTimeMap.put("Race", LocalDateTime.now());
+    return eventToTimeMap;
   }
 
   private static String getUkrainianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
