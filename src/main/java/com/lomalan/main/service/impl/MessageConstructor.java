@@ -83,16 +83,16 @@ public class MessageConstructor {
 
   private static Map<String, LocalDateTime> getEventMap(Race race) {
     HashMap<String, LocalDateTime> eventToTimeMap = new LinkedHashMap<>();
-    eventToTimeMap.put("First Practice", LocalDateTime.now());
-    eventToTimeMap.put("Second Practice", LocalDateTime.now());
+    eventToTimeMap.put("First Practice", race.getFirstPractice().getDateTime());
+    eventToTimeMap.put("Second Practice", race.getSecondPractice().getDateTime());
     if (race.getThirdPractice() != null) {
-      eventToTimeMap.put("Third Practice", LocalDateTime.now());
+      eventToTimeMap.put("Third Practice", race.getThirdPractice().getDateTime());
     }
-    eventToTimeMap.put("Qualification", LocalDateTime.now());
+    eventToTimeMap.put("Qualification", race.getQuali().getDateTime());
     if (race.getSprint() != null) {
-      eventToTimeMap.put("Sprint", LocalDateTime.now());
+      eventToTimeMap.put("Sprint", race.getSprint().getDateTime());
     }
-    eventToTimeMap.put("Race", LocalDateTime.now());
+    eventToTimeMap.put("Race", race.getDateTime());
     return eventToTimeMap;
   }
 
