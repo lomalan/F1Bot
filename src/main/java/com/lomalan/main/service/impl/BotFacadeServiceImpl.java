@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,7 +22,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 
 @Service
-@Slf4j
 @AllArgsConstructor
 public class BotFacadeServiceImpl implements BotFacadeService {
 
