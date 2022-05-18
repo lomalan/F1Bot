@@ -28,7 +28,7 @@ public class WeatherServiceImpl {
   private final TelegramUserRepository userRepository;
   private final MessageExecutor messageExecutor;
 
-  @Scheduled(cron = "0 0/30 8-18 * * FRI-SUN")
+  @Scheduled(cron = "0 0/30 8-20 * * FRI-SUN")
   public void scheduleWeatherUpdates() {
     log.info("Start to search subscribers on weather updates.... ");
     List<TelegramUser> telegramUsers = getWeatherSubscribers();
@@ -36,15 +36,19 @@ public class WeatherServiceImpl {
       return;
     }
     Race nextRace = f1SchedulesRestClient.getNextRace();
-    if (!nextRace.isValidDateForWeatherPosting() 
-        && !nextRace.getQuali().isValidDateForWeatherPosting() 
-        && (nextRace.getSprint() == null || !nextRace.getSprint().isValidDateForWeatherPosting())) {
+    if (isInvalidDateForWeatherPosting(nextRace)) {
       return;
     }
     String cityName = nextRace.getCircuit().getLocation().getLocality();
     WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(cityName);
     telegramUsers
         .forEach(user -> messageExecutor.executeMessage(user, MessageConstructor.constructWeatherMessage(weather)));
+  }
+
+  private boolean isInvalidDateForWeatherPosting(Race nextRace) {
+    return nextRace.isInvalidDateForWeatherPosting()
+        && nextRace.getQuali().isInvalidDateForWeatherPosting()
+        && (nextRace.getSprint() == null || nextRace.getSprint().isInvalidDateForWeatherPosting());
   }
 
   private List<TelegramUser> getWeatherSubscribers() {

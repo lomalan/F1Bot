@@ -11,16 +11,16 @@ public class Event {
   private String date;
   private String time;
 
-  public boolean isValidDateForLiveTimingPosting() {
+  public boolean isInvalidDateForLiveTimingPosting() {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime raceDateTime = getDateTime();
-    return now.isAfter(raceDateTime) && now.isBefore(raceDateTime.plusHours(2));
+    return !now.isAfter(raceDateTime) || !now.isBefore(raceDateTime.plusHours(2));
   }
 
-  public boolean isValidDateForWeatherPosting() {
+  public boolean isInvalidDateForWeatherPosting() {
     LocalDateTime now = LocalDateTime.now();
     LocalDateTime raceDateTime = getDateTime();
-    return now.isAfter(raceDateTime.minusHours(2)) && raceDateTime.isAfter(now);
+    return !now.isAfter(raceDateTime.minusHours(2)) || !raceDateTime.isAfter(now);
   }
 
   public LocalDateTime getDateTime() {

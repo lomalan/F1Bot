@@ -28,13 +28,17 @@ public class LiveTimingService {
   public void getLiveDriverInfo() {
     Race nextRace = f1SchedulesRestClient.getNextRace();
 
-    if (!nextRace.isValidDateForLiveTimingPosting() 
-        && !nextRace.getQuali().isValidDateForLiveTimingPosting()
-        && (nextRace.getSprint() == null || nextRace.getSprint().isValidDateForLiveTimingPosting())) {
+    if (isInvalidDateForLiveTiming(nextRace)) {
       return;
     }
     log.info("Start to search live subs.....");
     executeDataForSubscribers();
+  }
+
+  private boolean isInvalidDateForLiveTiming(Race nextRace) {
+    return nextRace.isInvalidDateForLiveTimingPosting()
+        && nextRace.getQuali().isInvalidDateForLiveTimingPosting()
+        && (nextRace.getSprint() == null || nextRace.getSprint().isInvalidDateForLiveTimingPosting());
   }
 
   private void executeDataForSubscribers() {

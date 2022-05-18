@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
@@ -75,23 +76,23 @@ public class MessageConstructor {
 
   private static String parseEvents(Map<String, LocalDateTime> eventMap) {
     return eventMap.entrySet().stream()
-      .map(entry -> getUkranianTimeForEvent(entry.getValue(), entry.getKey()))
+      .map(entry -> getUkrainianTimeForEvent(entry.getValue(), entry.getKey()))
       .collect(Collectors.joining("\n\n")); 
   }
 
   private static Map<String, LocalDateTime> getEventMap(Race race) {
     return Map.of("First Practice", race.getFirstPractice().getDateTime(),
     "Second Practice", race.getSecondPractice().getDateTime(),
-    "Third Practice", race.getThirdPractice() == null ? null : race.getThirdPractice().getDateTime(),
+    "Third Practice", race.getThirdPractice() == null ? LocalDateTime.MIN : race.getThirdPractice().getDateTime(),
     "Qualification", race.getQuali().getDateTime(),
-    "Sprint", race.getSprint() == null ? null : race.getSprint().getDateTime(),
+    "Sprint", race.getSprint() == null ?  LocalDateTime.MIN : race.getSprint().getDateTime(),
     "Race", race.getDateTime())
     .entrySet().stream()
-    .filter(entry -> entry.getValue() != null)
-    .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+    .filter(entry -> !entry.getValue().equals(LocalDateTime.MIN))
+    .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
-  private static String getUkranianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
+  private static String getUkrainianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
     return Emojis.UKRAINE.getUnicodeString() + eventName + " time: " + formatTimeAndDate(eventDateTime);
   }
 
