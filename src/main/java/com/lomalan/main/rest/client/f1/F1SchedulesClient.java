@@ -3,6 +3,8 @@ package com.lomalan.main.rest.client.f1;
 import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.f1.RaceResponse;
 import java.util.Objects;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
+@Slf4j
 public class F1SchedulesClient {
 
   private final RestTemplate restTemplate;
