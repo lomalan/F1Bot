@@ -13,7 +13,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    environment: f1-botua
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -24,5 +24,5 @@ jobs:
         cache: maven
     - name: Build with Maven
       env:
-        WEATHER_API_KEY: 12345
+        WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
       run: mvn -B clean package
