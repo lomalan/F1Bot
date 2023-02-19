@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MessageConstructor {
 
-  private static final String CELSIUS_SIGN = "\u00B0C";
+  private static final String CELSIUS_SIGN = "°C";
   private static final String DOUBLE_NEW_LINE = "\n\n";
 
   private MessageConstructor() {
@@ -32,21 +32,16 @@ public class MessageConstructor {
     return getDriversStanding(driverStandings);
   }
 
-  public static String constructWeatherMessage(WeatherResponse response) {
-    return getWeatherInfo(response);
-  }
-
-  private static String getWeatherInfo(WeatherResponse response) {
+  public static String constructWeatherMessage(WeatherResponse response, String cityName) {
     Weather weather = response.getWeather().get(0);
-    String cityName = response.getCityName();
     WeatherInfo weatherInfo = response.getWeatherInfo();
     return String.format("%s %s%s", "Current weather in ", cityName, DOUBLE_NEW_LINE)
-        + findEmojiForString(weather.getMain()) + "(" + weather.getDescription() +")" + "\n"
-        + "Temperature: " + weatherInfo.getTemp() + CELSIUS_SIGN + "\n"
-        + "Feels like: " + weatherInfo.getFeelTemp() + CELSIUS_SIGN + "\n"
-        + "Humidity: " + weatherInfo.getHumidity() + "%\n\n"
-        + "Wind speed: " + response.getWindSpeed() + " m/s \n"
-        + "Cloudiness: " + response.getCloudiness() + "%";
+      + findEmojiForString(weather.getMain()) + "(" + weather.getDescription() +")" + "\n"
+      + "Temperature: " + weatherInfo.getTemp() + CELSIUS_SIGN + "\n"
+      + "Feels like: " + weatherInfo.getFeelTemp() + CELSIUS_SIGN + "\n"
+      + "Humidity: " + weatherInfo.getHumidity() + "%\n\n"
+      + "Wind speed: " + response.getWindSpeed() + " m/s \n"
+      + "Cloudiness: " + response.getCloudiness() + "%";
   }
 
   private static String getDriversStanding(List<DriverStandings> driverStandings) {

@@ -8,6 +8,10 @@ import lombok.Data;
 
 @Data
 public class WeatherResponse implements Serializable {
+
+  @JsonProperty("coord")
+  private Coordinates coordinates;
+
   private List<Weather> weather;
   @JsonProperty("main")
   private WeatherInfo weatherInfo;

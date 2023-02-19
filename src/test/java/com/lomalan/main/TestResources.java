@@ -19,6 +19,8 @@ public final class TestResources {
     return pathOfResource("driverStandingsExample.json");
   }
 
+  public static Path locationInfo() { return pathOfResource("countryCodeCity.json"); }
+
   private static Path pathOfResource(String resourceName) {
     try {
       URL resource = TestResources.class.getClassLoader().getResource(resourceName);
