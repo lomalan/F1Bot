@@ -4,6 +4,7 @@ import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
 import com.lomalan.main.rest.client.f1.F1SchedulesClient;
 import com.lomalan.main.rest.client.weather.WeatherClient;
+import com.lomalan.main.rest.model.f1.Location;
 import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
 import com.lomalan.main.service.impl.MessageConstructor;
@@ -39,10 +40,11 @@ public class WeatherServiceImpl {
     if (isInvalidDateForWeatherPosting(nextRace)) {
       return;
     }
-    String cityName = nextRace.getCircuit().getLocation().getLocality();
-    WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(cityName);
+    Location location = nextRace.getCircuit().getLocation();
+    WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(location);
     telegramUsers
-        .forEach(user -> messageExecutor.executeMessage(user, MessageConstructor.constructWeatherMessage(weather)));
+        .forEach(user -> messageExecutor
+          .executeMessage(user, MessageConstructor.constructWeatherMessage(weather, location.getLocality())));
   }
 
   private boolean isInvalidDateForWeatherPosting(Race nextRace) {
