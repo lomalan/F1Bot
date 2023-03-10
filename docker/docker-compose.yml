@@ -1,18 +1,66 @@
 version: '3.8'
+
 services:
 
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
   mongo:
-    image: mongo
+    image: 'mongo'
+    volumes:
+      - data:/data/db
     ports:
       - 27017:27017
 
+  f1livetiming:
+    image: 'f1livetiming:latest'
+
+  tweetcollector:
+    image: 'tweetcollector:latest'
+    depends_on:
+      - kafka
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - TWITTER_TOKEN=<secret.You need to have an access to twitter developer account>
+
   f1bot:
-    image: f1bot/f1bot:latest
+    build: ..
     ports:
       - 9999:9999
       - 4444:4444
-    depends_on: [mongo]
+    depends_on:
+      - mongo
     environment:
-      JAVA_OPTS:
-        -Dlogging.level.org.springframework.web.client.RestTemplate=DEBUG
-        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4444
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - BOT_WEBHOOKURL=https://#yourName#.loca.lt
+      - LIVE_TIMING_API=http://f1livetiming:7777/live
+
+  localtunnel:
+    image: efrecon/localtunnel
+    links:
+      - f1bot
+    command:
+      --local-host f1bot --port 9999
+      --subdomain #<yourName>
+volumes:
+  data:
