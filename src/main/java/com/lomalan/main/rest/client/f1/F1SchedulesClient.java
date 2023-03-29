@@ -41,6 +41,7 @@ public class F1SchedulesClient {
     HttpEntity<?> entity = new HttpEntity<>(headers);
     ResponseEntity<RaceResponse> nextRace = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
         RaceResponse.class);
+    log.info("F1Schedules response is: {}", nextRace);
     if (Objects.nonNull(nextRace.getBody()) && Objects.nonNull(nextRace.getBody().getMrData())
         && Objects.nonNull(nextRace.getBody().getMrData().getRaceTable())
         && Objects.nonNull(nextRace.getBody().getMrData().getRaceTable().getRaces())) {
