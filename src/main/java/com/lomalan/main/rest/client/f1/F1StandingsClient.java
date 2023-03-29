@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Component
 @Slf4j
 public class F1StandingsClient {
+
  private String ergastApi;
 
   public F1StandingsClient(@Value(value = "${ergast.api}") String ergastApi) {

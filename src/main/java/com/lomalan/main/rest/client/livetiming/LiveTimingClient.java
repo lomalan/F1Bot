@@ -1,7 +1,6 @@
 package com.lomalan.main.rest.client.livetiming;
 
 import java.util.Optional;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

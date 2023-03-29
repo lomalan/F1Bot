@@ -20,11 +20,8 @@ public class F1SchedulesClientTest {
 
   @Test
   public void testNextRace() throws Exception {
-
     Race nextRace = testObject.getNextRace();
     assertEquals("2023", nextRace.getSeason());
-
   }
-
 
 }
