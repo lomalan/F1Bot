@@ -1,4 +1,4 @@
-package com.lomalan.main.rest.weather;
+package com.lomalan.main.rest.f1;
 
 
 import com.lomalan.main.TestConfig;
