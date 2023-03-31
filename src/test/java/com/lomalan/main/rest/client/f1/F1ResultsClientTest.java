@@ -1,7 +1,6 @@
-package com.lomalan.main.rest.f1;
+package com.lomalan.main.rest.client.f1;
 
 import com.lomalan.main.TestConfig;
-import com.lomalan.main.rest.client.f1.F1ResultsClient;
 import com.lomalan.main.rest.model.f1.RaceResults;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +22,7 @@ public class F1ResultsClientTest {
     assertEquals("2023", raceResults.getSeason());
   }
   @Test
-  public void testRaceResults1() throws IOException {
+  public void testDriversQuantity() throws IOException {
     RaceResults raceResults = testObject.getRaceResults();
     assertEquals(20, raceResults.getDriverStandings().size());
   }

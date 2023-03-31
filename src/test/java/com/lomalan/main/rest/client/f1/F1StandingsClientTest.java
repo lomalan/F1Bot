@@ -1,8 +1,7 @@
-package com.lomalan.main.rest.f1;
+package com.lomalan.main.rest.client.f1;
 
 
 import com.lomalan.main.TestConfig;
-import com.lomalan.main.rest.client.f1.F1StandingsClient;
 import com.lomalan.main.rest.model.f1.DriverStandings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

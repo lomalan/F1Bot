@@ -3,7 +3,6 @@ package com.lomalan.main.rest.client.f1;
 import com.lomalan.main.rest.model.f1.Race;
 import com.lomalan.main.rest.model.f1.RaceResponse;
 import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -25,7 +24,6 @@ public class F1SchedulesClient {
   private String ergastApi;
 
   private static final String CURRENT_SEASON_NEXT_RACE_ENDPOINT = "current/next.json";
-
 
   public F1SchedulesClient(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
