@@ -1,4 +1,4 @@
-package com.lomalan.main.rest.weather;
+package com.lomalan.main.rest.client.weather;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -7,7 +7,6 @@ import com.lomalan.main.TestConfig;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lomalan.main.TestResources;
-import com.lomalan.main.rest.client.weather.WeatherClient;
 import com.lomalan.main.rest.model.f1.Location;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
 import org.junit.jupiter.api.Test;

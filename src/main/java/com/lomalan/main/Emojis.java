@@ -33,7 +33,8 @@ public enum Emojis {
   DRIZZLE(EmojiParser.parseToUnicode(":white_sun_behind_cloud_rain:")),
   MIST(EmojiParser.parseToUnicode(":fog:")),
 
-  F1(EmojiParser.parseToUnicode(":f1:"));
+  F1(EmojiParser.parseToUnicode(":f1:")),
+  CHECKERED_FLAG(EmojiParser.parseToUnicode(":checkered_flag:"));
 
 
   private final String unicodeString;
