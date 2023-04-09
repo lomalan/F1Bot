@@ -20,6 +20,7 @@ public class LastRaceService implements MessageService {
   public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
     return getRaceResultData(update);
   }
+
   private Optional<MessageContainer> getRaceResultData(Update update) {
     if (BotCommands.RACE_RESULTS.getCommandName().equals(update.getMessage().getText())) {
       return raceResultsService.getRaceResults();

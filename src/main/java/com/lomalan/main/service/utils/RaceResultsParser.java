@@ -8,14 +8,12 @@ import com.lomalan.main.rest.model.f1.RaceResults;
 
 public class RaceResultsParser {
 
-  public RaceResultsParser() {
-  }
+  private RaceResultsParser() {}
 
   public static RaceResults parseToRaceResults(String json) {
     json = json.replace("Driver", "driver");
     Gson gson = new Gson();
-    JsonObject jobject = getAsJsonObject(json);
-    return gson.fromJson(jobject, RaceResults.class);
+    return gson.fromJson(getAsJsonObject(json), RaceResults.class);
   }
 
   private static JsonObject getAsJsonObject(String json) {
