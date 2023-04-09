@@ -2,6 +2,7 @@ package com.lomalan.main.bot.commands;
 
 public enum BotCommands {
   NEXT_RACE("Next Race"),
+  RACE_RESULTS("Race results"),
   DRIVERS_STANDING("Drivers Standing"),
   CURRENT_WEATHER("Subscribe on weather"),
   UNSUB_WEATHER("Unsubscribe from weather"),

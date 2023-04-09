@@ -3,6 +3,7 @@ package com.lomalan.main.service.impl;
 import com.lomalan.main.Emojis;
 import com.lomalan.main.rest.model.f1.DriverStandings;
 import com.lomalan.main.rest.model.f1.Race;
+import com.lomalan.main.rest.model.f1.RaceResults;
 import com.lomalan.main.rest.model.weather.Weather;
 import com.lomalan.main.rest.model.weather.WeatherInfo;
 import com.lomalan.main.rest.model.weather.WeatherResponse;
@@ -27,6 +28,8 @@ public class MessageConstructor {
   public static String constructNextRaceMessage(Race nextRace) {
     return getRaceInfo(nextRace);
   }
+
+  public static String constructRaceResultsMassage(RaceResults raceResults) {return getRaceResultsInfo(raceResults); }
 
   public static String constructStandingsMessage(List<DriverStandings> driverStandings) {
     return getDriversStanding(driverStandings);
@@ -57,6 +60,16 @@ public class MessageConstructor {
     return driverStandings.getPosition().concat(". ")
         .concat(driverStandings.getDriver().getCode()).concat(StringUtils.SPACE)
         .concat(String.valueOf(driverStandings.getPoints()));
+  }
+
+  private static String getRaceResultsInfo(RaceResults raceResults) {
+     return resolveResultsRaceTitle(raceResults)
+       + "Season: " + raceResults.getSeason() + "\n\n"
+       + "Round: " + raceResults.getRound() + "\n\n"
+       + "Driver standings: \n\n"
+       + Emojis.CHECKERED_FLAG.getUnicodeString() + "Name Points" + "\n\n"
+       + raceResults.getDriverStandings().stream().map(MessageConstructor::toStringValue).collect(Collectors.joining("\n")) + "\n\n"
+       + "Wiki info: " + raceResults.getUrl();
   }
 
   private static String getRaceInfo(Race race) {
@@ -98,6 +111,11 @@ public class MessageConstructor {
   private static String resolveTitle(Race race) {
     String emojiUnicodeValue = findEmojiForString(race.getCircuit().getLocation().getCountry());
     return String.format("%s%s%s%s", emojiUnicodeValue, race.getRaceName(), emojiUnicodeValue, "\n\n");
+  }
+
+  private static String resolveResultsRaceTitle(RaceResults raceResults) {
+    String emojiUnicodeValue = Emojis.F1.getUnicodeString();
+    return  String.format("%s%s%s%s", emojiUnicodeValue, raceResults.getRaceName(), emojiUnicodeValue, "\n\n");
   }
 
   private static String findEmojiForString(String value) {
