@@ -1,24 +1,47 @@
 package com.lomalan.main.rest.model.f1;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
+import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class Race extends Event {
+@Builder
+public class Race {
   private String season;
   private String round;
   private String url;
   private String raceName;
-  @JsonProperty("Circuit")
+  private String date;
+  private String time;
+
+  @SerializedName("Circuit")
   private Circuit circuit;
-  @JsonProperty("FirstPractice")
+
+  @SerializedName("FirstPractice")
   private Event firstPractice;
-  @JsonProperty("SecondPractice")
+
+  @SerializedName("SecondPractice")
   private Event secondPractice;
-  @JsonProperty("ThirdPractice")
+
+  @SerializedName("ThirdPractice")
   private Event thirdPractice;
-  @JsonProperty("Qualifying")
+
+  @SerializedName("Qualifying")
   private Event quali;
-  @JsonProperty("Sprint")
+
+  @SerializedName("Sprint")
   private Event sprint;
+
+  public boolean isInvalidDateForLiveTimingPosting() {
+    return Event.builder().date(date).time(time).build().isInvalidDateForLiveTimingPosting();
+  }
+
+  public boolean isInvalidDateForWeatherPosting() {
+    return Event.builder().date(date).time(time).build().isInvalidDateForWeatherPosting();
+  }
+
+  public LocalDateTime getDateTime() {
+    return Event.builder().date(date).time(time).build().getDateTime();
+  }
 }

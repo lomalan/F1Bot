@@ -16,13 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-/**
- * Processing current weather data during the race weekend
- */
+/** Processing current weather data during the race weekend */
 @Service
 @AllArgsConstructor
 @Slf4j
-public class WeatherServiceImpl {
+public class WeatherService {
 
   private final F1SchedulesClient f1SchedulesRestClient;
   private final WeatherClient weatherRestClient;
@@ -42,9 +40,12 @@ public class WeatherServiceImpl {
     }
     Location location = nextRace.getCircuit().getLocation();
     WeatherResponse weather = weatherRestClient.getWeatherOnRaceLocation(location);
-    telegramUsers
-        .forEach(user -> messageExecutor
-          .executeMessage(user, MessageConstructor.constructWeatherMessage(weather, location.getLocality())));
+    telegramUsers.forEach(user -> executeMessage(location, weather, user));
+  }
+
+  private void executeMessage(Location location, WeatherResponse weather, TelegramUser user) {
+    messageExecutor.executeMessage(
+        user, MessageConstructor.constructWeatherMessage(weather, location.getLocality()));
   }
 
   private boolean isInvalidDateForWeatherPosting(Race nextRace) {
@@ -54,7 +55,9 @@ public class WeatherServiceImpl {
   }
 
   private List<TelegramUser> getWeatherSubscribers() {
-    return userRepository.findAll().stream()
+    return userRepository
+        .findAll()
+        .stream()
         .filter(TelegramUser::isSubscribedOnWeather)
         .collect(Collectors.toList());
   }
