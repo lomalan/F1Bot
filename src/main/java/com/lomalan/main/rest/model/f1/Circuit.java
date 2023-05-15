@@ -1,6 +1,6 @@
 package com.lomalan.main.rest.model.f1;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class Circuit {
   private String url;
   private String circuitName;
 
-  @JsonProperty("Location")
+  @SerializedName("Location")
   private Location location;
 }

@@ -18,9 +18,10 @@ public class MessageExecutorImpl implements MessageExecutor {
 
   @Override
   public void executeMessage(TelegramUser user, String messageText) {
-    SendMessage sendMessage = new SendMessage();
-    sendMessage.setChatId(user.getChatId());
-    sendMessage.setText(messageText);
+    SendMessage sendMessage = SendMessage.builder()
+            .chatId(user.getChatId())
+            .text(messageText)
+            .build();
     try {
       sportNewsBot.executeMethod(sendMessage);
     } catch (TelegramApiException e) {
