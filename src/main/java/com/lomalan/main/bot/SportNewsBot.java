@@ -45,7 +45,7 @@ public class SportNewsBot extends TelegramWebhookBot {
       } catch (TelegramApiException e) {
         log.error(e.getMessage(), e);
       }
-    return null;
+      return null;
   }
 
   private void processUpdate(Update update) throws TelegramApiException {

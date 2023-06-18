@@ -9,19 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestConfig.class, F1SchedulesClient.class})
-public class F1SchedulesClientTest {
+class F1SchedulesClientTest {
 
   @Autowired
   private F1SchedulesClient testObject;
 
   @Test
-  public void testNextRace() throws Exception {
+  void testNextRace() {
     Race nextRace = testObject.getNextRace();
-    assertEquals("2023", nextRace.getSeason());
+    assertTrue(Integer.parseInt(nextRace.getSeason()) >= 2023);
   }
 
 }

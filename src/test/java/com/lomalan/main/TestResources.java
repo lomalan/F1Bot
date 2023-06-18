@@ -11,6 +11,9 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import org.telegram.telegrambots.meta.api.objects.Chat;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 public final class TestResources {
 
@@ -55,5 +58,14 @@ public final class TestResources {
 
   public static Location createLocationWithCustomData(String locality, String country) {
     return Location.builder().locality(locality).country(country).build();
+  }
+
+  public static Update createUpdate(String command) {
+    Update update = new Update();
+    Message message = new Message();
+    message.setText(command);
+    message.setChat(new Chat());
+    update.setMessage(message);
+    return update;
   }
 }

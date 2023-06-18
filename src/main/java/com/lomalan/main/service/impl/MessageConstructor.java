@@ -32,6 +32,9 @@ public class MessageConstructor {
   public static String constructRaceResultsMassage(RaceResults raceResults) {return getRaceResultsInfo(raceResults); }
 
   public static String constructStandingsMessage(List<DriverStandings> driverStandings) {
+    if (driverStandings.isEmpty()) {
+      return "Sorry, can't return driver standings. Please try again later.";
+    }
     return getDriversStanding(driverStandings);
   }
 
