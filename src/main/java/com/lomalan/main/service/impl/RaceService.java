@@ -23,7 +23,7 @@ public class RaceService implements MessageService {
 
   private Optional<MessageContainer> getRaceData(Update update) {
     if (BotCommands.NEXT_RACE.getCommandName().equals(update.getMessage().getText())) {
-      return scheduleService.getNextRace(update);
+      return scheduleService.getNextRace();
     }
     return Optional.empty();
   }

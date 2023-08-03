@@ -14,59 +14,62 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @AllArgsConstructor
 public abstract class AbstractSubscriptionsService implements SubscriptionsService, MessageService {
 
-  private final TelegramUserRepository userRepository;
+    private final TelegramUserRepository userRepository;
 
-  private static final String ALREADY_SUB = "You're already subscribed";
+    private static final String ALREADY_SUB = "You're already subscribed";
 
-  abstract CommandNames getCommandName();
+    private static final String ALREADY_UNSUB = "You're already unsubscribed";
 
-  abstract String subUser(TelegramUser user);
+    abstract CommandNames getCommandName();
 
-  abstract String unsubUser(TelegramUser user);
+    abstract String subUser(TelegramUser user);
 
-  abstract boolean isUserSubscribed(TelegramUser user);
+    abstract String unsubUser(TelegramUser user);
 
-  @Override
-  public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    String subscribeResult = subscribe(update, user);
-    String unsubscribeResult = unsubscribe(update, user);
-    if (subscribeResult.isEmpty() && unsubscribeResult.isEmpty()) {
-      return Optional.empty();
+    abstract boolean isUserSubscribed(TelegramUser user);
+
+    @Override
+    public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
+        String subscribeResult = subscribe(update, user);
+        String unsubscribeResult = unsubscribe(update, user);
+        if (subscribeResult.isEmpty() && unsubscribeResult.isEmpty()) {
+            return Optional.empty();
+        } else if (!subscribeResult.equals(ALREADY_SUB) && !unsubscribeResult.equals(ALREADY_UNSUB)) {
+            userRepository.save(user);
+        }
+        if (subscribeResult.isEmpty()) {
+            return Optional.of(new MessageContainer(unsubscribeResult));
+        }
+        return Optional.of(new MessageContainer(subscribeResult));
     }
 
-    userRepository.save(user);
-    if (subscribeResult.isEmpty()) {
-      return Optional.of(new MessageContainer(unsubscribeResult));
-    }
-    return Optional.of(new MessageContainer(subscribeResult));
-  }
-
-  @Override
-  public String getCurrentCommand(TelegramUser user) {
-    if (isUserSubscribed(user)) {
-      return getCommandName().getSubCommandName();
-    }
-    return getCommandName().getUnsubCommandName();
-  }
-
-  @Override
-  public String subscribe(Update update, TelegramUser telegramUser) {
-    if (!getCommandName().getSubCommandName().equals(update.getMessage().getText())) {
-      return StringUtils.EMPTY;
+    @Override
+    public String getCurrentCommand(TelegramUser user) {
+        if (isUserSubscribed(user)) {
+            return getCommandName().getSubCommandName();
+        }
+        return getCommandName().getUnsubCommandName();
     }
 
-    return isUserSubscribed(telegramUser)
-        ? ALREADY_SUB
-        : subUser(telegramUser);
-  }
+    @Override
+    public String subscribe(Update update, TelegramUser telegramUser) {
+        if (!getCommandName().getSubCommandName().equals(update.getMessage().getText())) {
+            return StringUtils.EMPTY;
+        }
 
-  @Override
-  public String unsubscribe(Update update, TelegramUser telegramUser) {
-    if (!getCommandName().getUnsubCommandName().equals(update.getMessage().getText())) {
-      return StringUtils.EMPTY;
+        return isUserSubscribed(telegramUser)
+                ? ALREADY_SUB
+                : subUser(telegramUser);
     }
 
-    return unsubUser(telegramUser);
-  }
+    @Override
+    public String unsubscribe(Update update, TelegramUser telegramUser) {
+        if (!getCommandName().getUnsubCommandName().equals(update.getMessage().getText())) {
+            return StringUtils.EMPTY;
+        }
 
+        return isUserSubscribed(telegramUser)
+                ? unsubUser(telegramUser)
+                : ALREADY_UNSUB;
+    }
 }

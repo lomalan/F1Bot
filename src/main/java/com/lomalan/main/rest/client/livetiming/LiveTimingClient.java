@@ -18,21 +18,23 @@ public class LiveTimingClient {
 
   private final RestTemplate restTemplate;
 
-  @Value("${live.timing.api}")
-  private String liveTimingApi;
+  private final String liveTimingApi;
   private static final String RACE_ENDPOINT = "/data";
 
-  public LiveTimingClient(RestTemplate restTemplate) {
+  public LiveTimingClient(
+      RestTemplate restTemplate, @Value("${live.timing.api}") String liveTimingApi) {
     this.restTemplate = restTemplate;
+    this.liveTimingApi = liveTimingApi;
   }
 
   public Optional<String> getRaceLiveTiming() {
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(liveTimingApi.concat(RACE_ENDPOINT));
+    UriComponentsBuilder builder =
+        UriComponentsBuilder.fromHttpUrl(liveTimingApi.concat(RACE_ENDPOINT));
     HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-    ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity,
-        String.class);
+    ResponseEntity<String> response =
+        restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, String.class);
     log.info("LifeTiming response is: {}", response);
-    if (response.getStatusCode().equals(HttpStatus.NO_CONTENT)) {
+    if (!response.getStatusCode().equals(HttpStatus.OK)) {
       return Optional.empty();
     }
     return Optional.ofNullable(response.getBody());

@@ -29,11 +29,11 @@ public class SuggestionStateService implements MessageService {
   private TelegramUserRepository userRepository;
 
   public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    String chatId = update.getMessage().getChatId().toString();
     if (!user.getState().equals(BotState.SUGGESTION)) {
       return Optional.empty();
     }
     processUserStatus(user);
+    String chatId = update.getMessage().getChatId().toString();
     return processSuggestions(update, chatId);
   }
 
@@ -50,7 +50,7 @@ public class SuggestionStateService implements MessageService {
         .filter(suggestion -> suggestion.getDateStamp().equals(LocalDate.now()))
         .collect(Collectors.toList());
 
-    if (suggestions.size() > 5) {
+    if (suggestions.size() >= 5) {
       return Optional.of(new MessageContainer(SUGGESTIONS_LIMIT_MESSAGE));
     }
 

@@ -11,7 +11,6 @@ import com.lomalan.main.service.BotMenuService;
 import com.lomalan.main.service.MessageService;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -52,7 +51,7 @@ public class BotFacadeServiceImpl implements BotFacadeService {
   private Optional<MessageContainer> processMessageServices(Update update, TelegramUser user) {
     return messageServices.stream()
         .map(messageService -> messageService.processMessage(update, user))
-        .flatMap(optional -> optional.map(Stream::of).orElseGet(Stream::empty))
+        .flatMap(Optional::stream)
         .findFirst();
   }
 

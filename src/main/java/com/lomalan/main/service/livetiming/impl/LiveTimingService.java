@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 /**
  * Processing live time real data during the race
@@ -42,7 +43,8 @@ public class LiveTimingService {
   }
 
   private void executeDataForSubscribers() {
-    userRepository.findAll().stream()
+    List<TelegramUser> allUsers = userRepository.findAll();
+    allUsers.stream()
         .filter(TelegramUser::isSubscribedOnLiveUpdates)
         .forEach(this::executeMessage);
   }

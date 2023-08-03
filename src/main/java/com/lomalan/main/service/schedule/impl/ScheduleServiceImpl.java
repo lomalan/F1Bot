@@ -9,7 +9,6 @@ import com.lomalan.main.service.schedule.ScheduleService;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -21,7 +20,7 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
   @Override
-  public Optional<MessageContainer> getNextRace(Update update) {
+  public Optional<MessageContainer> getNextRace() {
     Race nextRace = client.getNextRace();
     Optional<InputFile> photo = getPhoto(nextRace);
     String nextRaceMessage = MessageConstructor.constructNextRaceMessage(nextRace);
@@ -33,14 +32,11 @@ public class ScheduleServiceImpl implements ScheduleService {
   }
 
   private MessageContainer constructMessageContainer(String text, InputFile photo) {
-    return MessageContainer.builder()
-        .text(text)
-        .photo(photo)
-        .build();
+    return MessageContainer.builder().text(text).photo(photo).build();
   }
 
   private Optional<InputFile> getPhoto(Race nextRace) {
-    if (nextRace.getCircuit().getLocation().getCountry().equals("UAE")) {
+    if ("UAE".equals(nextRace.getCircuit().getLocation().getCountry())) {
       return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getLocality());
     }
     return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getCountry());
