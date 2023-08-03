@@ -33,7 +33,8 @@ public class SuggestionStateService implements MessageService {
       return Optional.empty();
     }
     processUserStatus(user);
-    return processSuggestions(update, String.valueOf(update.getMessage().getChatId()));
+    String chatId = update.getMessage().getChatId().toString();
+    return processSuggestions(update, chatId);
   }
 
   private void processUserStatus(TelegramUser user) {
