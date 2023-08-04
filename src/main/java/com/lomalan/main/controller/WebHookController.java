@@ -10,15 +10,14 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RestController
 public class WebHookController {
 
-  private final SportNewsBot sportNewsBot;
+    private final SportNewsBot sportNewsBot;
 
-  public WebHookController(SportNewsBot sportNewsBot) {
-    this.sportNewsBot = sportNewsBot;
-  }
+    public WebHookController(SportNewsBot sportNewsBot) {
+        this.sportNewsBot = sportNewsBot;
+    }
 
-  @PostMapping(value = "/")
-  public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
-    return sportNewsBot.onWebhookUpdateReceived(update);
-  }
-
+    @PostMapping(value = "/")
+    public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
+        return sportNewsBot.onWebhookUpdateReceived(update);
+    }
 }

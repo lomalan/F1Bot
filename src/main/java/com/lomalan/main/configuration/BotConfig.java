@@ -18,36 +18,36 @@ import org.springframework.web.client.RestTemplate;
 @Data
 @PropertySource("classpath:application.properties")
 public class BotConfig {
-  @Value("${bot.token}")
-  private String token;
-  @Value("${bot.name}")
-  private String name;
-  @Value("${bot.webhookUrl}")
-  private String webHookUrl;
-  @Value("${mongo.host}")
-  private String mongoHost;
+    @Value("${bot.token}")
+    private String token;
 
-  @Bean
-  public RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
+    @Value("${bot.name}")
+    private String name;
 
-  @Bean
-  public MongoClient mongo() {
-    ConnectionString connectionString = new ConnectionString(mongoHost);
-    MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-        .applyConnectionString(connectionString)
-        .build();
+    @Value("${bot.webhookUrl}")
+    private String webHookUrl;
 
-    return MongoClients.create(mongoClientSettings);
-  }
+    @Value("${mongo.host}")
+    private String mongoHost;
 
-  @Bean
-  public MongoTemplate mongoTemplate() {
-    MongoTemplate template = new MongoTemplate(mongo(), "test");
-    template
-        .indexOps("suggestion")
-        .ensureIndex(new Index("suggestionText", Direction.ASC).unique());
-    return template;
-  }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
+    public MongoClient mongo() {
+        ConnectionString connectionString = new ConnectionString(mongoHost);
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder().applyConnectionString(connectionString)
+                .build();
+
+        return MongoClients.create(mongoClientSettings);
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() {
+        MongoTemplate template = new MongoTemplate(mongo(), "test");
+        template.indexOps("suggestion").ensureIndex(new Index("suggestionText", Direction.ASC).unique());
+        return template;
+    }
 }

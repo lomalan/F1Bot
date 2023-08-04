@@ -21,22 +21,23 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 public class DriversService implements MessageService {
 
-  private final F1StandingsClient f1StandingsRestClient;
+    private final F1StandingsClient f1StandingsRestClient;
 
-  @Override
-  public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    if (!BotCommands.DRIVERS_STANDING.getCommandName().equals(update.getMessage().getText())) {
-      return Optional.empty();
+    @Override
+    public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
+        if (!BotCommands.DRIVERS_STANDING.getCommandName().equals(update.getMessage().getText())) {
+            return Optional.empty();
+        }
+        return Optional
+                .of(new MessageContainer(MessageConstructor.constructStandingsMessage(getCurrentSeasonStandings())));
     }
-    return Optional.of(new MessageContainer(MessageConstructor.constructStandingsMessage(getCurrentSeasonStandings())));
-  }
 
-  private List<DriverStandings> getCurrentSeasonStandings() {
-    try {
-      return f1StandingsRestClient.getDriverStandings();
-    } catch (IOException e) {
-      log.error(e.getMessage());
+    private List<DriverStandings> getCurrentSeasonStandings() {
+        try {
+            return f1StandingsRestClient.getDriverStandings();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+        return Collections.emptyList();
     }
-    return Collections.emptyList();
-  }
 }

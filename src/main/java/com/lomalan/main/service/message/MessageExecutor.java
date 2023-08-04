@@ -4,5 +4,5 @@ import com.lomalan.main.dao.model.TelegramUser;
 
 public interface MessageExecutor {
 
-  void executeMessage(TelegramUser user, String messageText);
+    void executeMessage(TelegramUser user, String messageText);
 }

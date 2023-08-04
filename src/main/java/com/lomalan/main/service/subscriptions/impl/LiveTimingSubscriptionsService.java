@@ -9,34 +9,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class LiveTimingSubscriptionsService extends AbstractSubscriptionsService {
 
-  private static final String SUB_MESSAGE = "You're successfully subscribed on live updates.\n\n"
-      +    "You will receive every 5 minutes race updates when it will start";
+    private static final String SUB_MESSAGE = "You're successfully subscribed on live updates.\n\n"
+            + "You will receive every 5 minutes race updates when it will start";
 
-  private static final String UNSUB_MESSAGE = "You're successfully unsubscribed from live updates.";
+    private static final String UNSUB_MESSAGE = "You're successfully unsubscribed from live updates.";
 
-  public LiveTimingSubscriptionsService(TelegramUserRepository userRepository) {
-    super(userRepository);
-  }
+    public LiveTimingSubscriptionsService(TelegramUserRepository userRepository) {
+        super(userRepository);
+    }
 
-  @Override
-  CommandNames getCommandName() {
-    return new CommandNames(BotCommands.SUB_LIVE.getCommandName(), BotCommands.UNSUB_LIVE.getCommandName());
-  }
+    @Override
+    CommandNames getCommandName() {
+        return new CommandNames(BotCommands.SUB_LIVE.getCommandName(), BotCommands.UNSUB_LIVE.getCommandName());
+    }
 
-  @Override
-  String subUser(TelegramUser user) {
-    user.setSubscribedOnLiveUpdates(true);
-    return SUB_MESSAGE;
-  }
+    @Override
+    String subUser(TelegramUser user) {
+        user.setSubscribedOnLiveUpdates(true);
+        return SUB_MESSAGE;
+    }
 
-  @Override
-  String unsubUser(TelegramUser user) {
-    user.setSubscribedOnLiveUpdates(false);
-    return UNSUB_MESSAGE;
-  }
+    @Override
+    String unsubUser(TelegramUser user) {
+        user.setSubscribedOnLiveUpdates(false);
+        return UNSUB_MESSAGE;
+    }
 
-  @Override
-  boolean isUserSubscribed(TelegramUser user) {
-    return user.isSubscribedOnLiveUpdates();
-  }
+    @Override
+    boolean isUserSubscribed(TelegramUser user) {
+        return user.isSubscribedOnLiveUpdates();
+    }
 }

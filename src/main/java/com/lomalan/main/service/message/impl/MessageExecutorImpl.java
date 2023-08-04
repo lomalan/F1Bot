@@ -14,19 +14,16 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 public class MessageExecutorImpl implements MessageExecutor {
 
-  private final SportNewsBot sportNewsBot;
+    private final SportNewsBot sportNewsBot;
 
-  @Override
-  public void executeMessage(TelegramUser user, String messageText) {
-    SendMessage sendMessage = SendMessage.builder()
-            .chatId(user.getChatId())
-            .text(messageText)
-            .build();
-    try {
-      sportNewsBot.executeMethod(sendMessage);
-    } catch (TelegramApiException e) {
-      log.error(e.getMessage());
-      throw new IllegalArgumentException(e.getMessage());
+    @Override
+    public void executeMessage(TelegramUser user, String messageText) {
+        SendMessage sendMessage = SendMessage.builder().chatId(user.getChatId()).text(messageText).build();
+        try {
+            sportNewsBot.executeMethod(sendMessage);
+        } catch (TelegramApiException e) {
+            log.error(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
-  }
 }

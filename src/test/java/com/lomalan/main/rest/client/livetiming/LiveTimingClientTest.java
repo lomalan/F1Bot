@@ -14,40 +14,29 @@ import org.springframework.web.client.RestTemplate;
 
 public class LiveTimingClientTest {
 
-  private final RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
-  private final String liveTimingApiMock = "http://localhost";
-  private final LiveTimingClient testObject =
-      new LiveTimingClient(restTemplateMock, liveTimingApiMock);
+    private final RestTemplate restTemplateMock = Mockito.mock(RestTemplate.class);
+    private final String liveTimingApiMock = "http://localhost";
+    private final LiveTimingClient testObject = new LiveTimingClient(restTemplateMock, liveTimingApiMock);
 
-  @Test
-  public void whenLiveTimingReturnsNoContentThenReturnEmptyResult() {
-    ResponseEntity<String> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    Mockito.when(
-            restTemplateMock.exchange(
-                liveTimingApiMock.concat("/data"),
-                HttpMethod.GET,
-                new HttpEntity<>(new HttpHeaders()),
-                String.class))
-        .thenReturn(response);
+    @Test
+    public void whenLiveTimingReturnsNoContentThenReturnEmptyResult() {
+        ResponseEntity<String> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Mockito.when(restTemplateMock.exchange(liveTimingApiMock.concat("/data"), HttpMethod.GET,
+                new HttpEntity<>(new HttpHeaders()), String.class)).thenReturn(response);
 
-    assertTrue(testObject.getRaceLiveTiming().isEmpty());
-  }
+        assertTrue(testObject.getRaceLiveTiming().isEmpty());
+    }
 
-  @Test
-  public void whenLiveTimingReturnsOkThenReturnContent() {
-    String expectedResponse = "Success";
-    ResponseEntity<String> response = new ResponseEntity<>(expectedResponse, HttpStatus.OK);
+    @Test
+    public void whenLiveTimingReturnsOkThenReturnContent() {
+        String expectedResponse = "Success";
+        ResponseEntity<String> response = new ResponseEntity<>(expectedResponse, HttpStatus.OK);
 
-    Mockito.when(
-            restTemplateMock.exchange(
-                liveTimingApiMock.concat("/data"),
-                HttpMethod.GET,
-                new HttpEntity<>(new HttpHeaders()),
-                String.class))
-        .thenReturn(response);
+        Mockito.when(restTemplateMock.exchange(liveTimingApiMock.concat("/data"), HttpMethod.GET,
+                new HttpEntity<>(new HttpHeaders()), String.class)).thenReturn(response);
 
-    var raceLiveTiming = testObject.getRaceLiveTiming();
-    assertTrue(raceLiveTiming.isPresent());
-    assertEquals(expectedResponse, raceLiveTiming.get());
-  }
+        var raceLiveTiming = testObject.getRaceLiveTiming();
+        assertTrue(raceLiveTiming.isPresent());
+        assertEquals(expectedResponse, raceLiveTiming.get());
+    }
 }

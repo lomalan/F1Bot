@@ -1,12 +1,5 @@
 package com.lomalan.main.service.subscriptions.impl;
 
-import com.lomalan.main.dao.model.TelegramUser;
-import com.lomalan.main.dao.repository.TelegramUserRepository;
-import com.lomalan.main.model.MessageContainer;
-import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import java.util.Optional;
-
 import static com.lomalan.main.TestResources.createUpdate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,6 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import com.lomalan.main.dao.model.TelegramUser;
+import com.lomalan.main.dao.repository.TelegramUserRepository;
+import com.lomalan.main.model.MessageContainer;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 class WeatherSubscriptionsServiceTest {
     private final TelegramUserRepository telegramUserRepository = mock(TelegramUserRepository.class);
@@ -33,7 +33,7 @@ class WeatherSubscriptionsServiceTest {
 
     @Test
     public void whenUnsubWantUnsubThenReturnMessageUnsub() {
-        //given
+        // given
         TelegramUser telegramUser = TelegramUser.builder().subscribedOnWeather(false).build();
         Update update = createUpdate("Unsubscribe from weather");
         // when

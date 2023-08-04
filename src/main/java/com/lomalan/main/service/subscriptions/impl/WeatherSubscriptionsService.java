@@ -9,34 +9,35 @@ import org.springframework.stereotype.Service;
 @Service
 public class WeatherSubscriptionsService extends AbstractSubscriptionsService {
 
-  private static final String SUB_MESSAGE = "You're successfully subscribed on weather updates.\n\n"
-      +    "You will receive every 30 minutes weather updates during the weekend before qualification and race";
+    private static final String SUB_MESSAGE = "You're successfully subscribed on weather updates.\n\n"
+            + "You will receive every 30 minutes weather updates during the weekend before qualification and race";
 
-  private static final String UNSUB_MESSAGE = "You're successfully unsubscribed from weather updates.";
+    private static final String UNSUB_MESSAGE = "You're successfully unsubscribed from weather updates.";
 
-  public WeatherSubscriptionsService(TelegramUserRepository userRepository) {
-    super(userRepository);
-  }
+    public WeatherSubscriptionsService(TelegramUserRepository userRepository) {
+        super(userRepository);
+    }
 
-  @Override
-  CommandNames getCommandName() {
-    return new CommandNames(BotCommands.CURRENT_WEATHER.getCommandName(), BotCommands.UNSUB_WEATHER.getCommandName());
-  }
+    @Override
+    CommandNames getCommandName() {
+        return new CommandNames(BotCommands.CURRENT_WEATHER.getCommandName(),
+                BotCommands.UNSUB_WEATHER.getCommandName());
+    }
 
-  @Override
-  String subUser(TelegramUser user) {
-    user.setSubscribedOnWeather(true);
-    return SUB_MESSAGE;
-  }
+    @Override
+    String subUser(TelegramUser user) {
+        user.setSubscribedOnWeather(true);
+        return SUB_MESSAGE;
+    }
 
-  @Override
-  String unsubUser(TelegramUser user) {
-    user.setSubscribedOnWeather(false);
-    return UNSUB_MESSAGE;
-  }
+    @Override
+    String unsubUser(TelegramUser user) {
+        user.setSubscribedOnWeather(false);
+        return UNSUB_MESSAGE;
+    }
 
-  @Override
-  public boolean isUserSubscribed(TelegramUser user) {
-    return user.isSubscribedOnWeather();
-  }
+    @Override
+    public boolean isUserSubscribed(TelegramUser user) {
+        return user.isSubscribedOnWeather();
+    }
 }

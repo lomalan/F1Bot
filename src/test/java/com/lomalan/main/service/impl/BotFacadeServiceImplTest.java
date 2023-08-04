@@ -1,21 +1,5 @@
 package com.lomalan.main.service.impl;
 
-import com.lomalan.main.bot.commands.BotCommands;
-import com.lomalan.main.dao.model.TelegramUser;
-import com.lomalan.main.dao.repository.TelegramUserRepository;
-import com.lomalan.main.model.MessageContainer;
-import com.lomalan.main.service.BotMenuService;
-import com.lomalan.main.service.MessageService;
-import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-
-import java.util.List;
-import java.util.Optional;
-
 import static com.lomalan.main.TestResources.createUpdate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -25,14 +9,29 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.lomalan.main.bot.commands.BotCommands;
+import com.lomalan.main.dao.model.TelegramUser;
+import com.lomalan.main.dao.repository.TelegramUserRepository;
+import com.lomalan.main.model.MessageContainer;
+import com.lomalan.main.service.BotMenuService;
+import com.lomalan.main.service.MessageService;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+
 class BotFacadeServiceImplTest {
 
     private final MessageService messageServices = mock(MessageService.class);
     private final TelegramUserRepository userRepository = mock(TelegramUserRepository.class);
     private final BotMenuService botMenuService = mock(BotMenuService.class);
 
-    private final BotFacadeServiceImpl botFacadeService =
-            new BotFacadeServiceImpl(List.of(messageServices), userRepository, botMenuService);
+    private final BotFacadeServiceImpl botFacadeService = new BotFacadeServiceImpl(List.of(messageServices),
+            userRepository, botMenuService);
 
     private static final String RANDOM_TEXT = "Random text";
     private static final String MAIN_MENU_TEXT = "Please use the main menu";
@@ -67,9 +66,8 @@ class BotFacadeServiceImplTest {
         TelegramUser telegramUser = TelegramUser.builder().build();
         when(userRepository.findByChatId(any())).thenReturn(telegramUser);
         String expectedMessage = "Race results are fine";
-        when(messageServices.processMessage(update, telegramUser)).thenReturn(
-                Optional.of(MessageContainer.builder().text(expectedMessage).build())
-        );
+        when(messageServices.processMessage(update, telegramUser))
+                .thenReturn(Optional.of(MessageContainer.builder().text(expectedMessage).build()));
 
         SendMessage result = (SendMessage) botFacadeService.processUpdateWithMessage(update);
 
@@ -88,11 +86,7 @@ class BotFacadeServiceImplTest {
         String expectedMessage = "Race results are fine";
         InputFile expectedInputFile = mock(InputFile.class);
         when(messageServices.processMessage(update, telegramUser)).thenReturn(
-                Optional.of(MessageContainer.builder()
-                        .text(expectedMessage)
-                        .photo(expectedInputFile)
-                        .build())
-        );
+                Optional.of(MessageContainer.builder().text(expectedMessage).photo(expectedInputFile).build()));
 
         SendPhoto result = (SendPhoto) botFacadeService.processUpdateWithMessage(update);
 

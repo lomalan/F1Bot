@@ -11,13 +11,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class F1BotApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		new SpringApplication(F1BotApplication.class).run(args);
-	}
+        new SpringApplication(F1BotApplication.class).run(args);
+    }
 
-	@Override
-	public void run(String[] args) throws Exception {
-		// For now does nothing
-	}
+    @Override
+    public void run(String[] args) throws Exception {
+        // For now does nothing
+    }
 }

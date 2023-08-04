@@ -5,5 +5,5 @@ import java.util.Optional;
 
 public interface ScheduleService {
 
-  Optional<MessageContainer> getNextRace();
+    Optional<MessageContainer> getNextRace();
 }

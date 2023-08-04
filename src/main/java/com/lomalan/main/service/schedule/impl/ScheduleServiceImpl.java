@@ -13,32 +13,32 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-  private final F1SchedulesClient client;
+    private final F1SchedulesClient client;
 
-  public ScheduleServiceImpl(F1SchedulesClient client) {
-    this.client = client;
-  }
-
-  @Override
-  public Optional<MessageContainer> getNextRace() {
-    Race nextRace = client.getNextRace();
-    Optional<InputFile> photo = getPhoto(nextRace);
-    String nextRaceMessage = MessageConstructor.constructNextRaceMessage(nextRace);
-    return Optional.of(getMessageContainer(photo, nextRaceMessage));
-  }
-
-  private MessageContainer getMessageContainer(Optional<InputFile> photo, String nextRaceMessage) {
-    return constructMessageContainer(nextRaceMessage, photo.orElse(null));
-  }
-
-  private MessageContainer constructMessageContainer(String text, InputFile photo) {
-    return MessageContainer.builder().text(text).photo(photo).build();
-  }
-
-  private Optional<InputFile> getPhoto(Race nextRace) {
-    if ("UAE".equals(nextRace.getCircuit().getLocation().getCountry())) {
-      return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getLocality());
+    public ScheduleServiceImpl(F1SchedulesClient client) {
+        this.client = client;
     }
-    return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getCountry());
-  }
+
+    @Override
+    public Optional<MessageContainer> getNextRace() {
+        Race nextRace = client.getNextRace();
+        Optional<InputFile> photo = getPhoto(nextRace);
+        String nextRaceMessage = MessageConstructor.constructNextRaceMessage(nextRace);
+        return Optional.of(getMessageContainer(photo, nextRaceMessage));
+    }
+
+    private MessageContainer getMessageContainer(Optional<InputFile> photo, String nextRaceMessage) {
+        return constructMessageContainer(nextRaceMessage, photo.orElse(null));
+    }
+
+    private MessageContainer constructMessageContainer(String text, InputFile photo) {
+        return MessageContainer.builder().text(text).photo(photo).build();
+    }
+
+    private Optional<InputFile> getPhoto(Race nextRace) {
+        if ("UAE".equals(nextRace.getCircuit().getLocation().getCountry())) {
+            return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getLocality());
+        }
+        return ImageProcessor.getImage(nextRace.getCircuit().getLocation().getCountry());
+    }
 }

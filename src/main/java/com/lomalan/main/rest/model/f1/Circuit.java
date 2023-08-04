@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Circuit {
-  private String url;
+    private String url;
 
-  @SerializedName("Location")
-  private Location location;
+    @SerializedName("Location")
+    private Location location;
 }

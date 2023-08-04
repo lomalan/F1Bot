@@ -1,23 +1,24 @@
 package com.lomalan.main.service.impl;
 
+import static com.lomalan.main.TestResources.createUpdate;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+
 import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.service.MessageService;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import java.util.Arrays;
-
-import static com.lomalan.main.TestResources.createUpdate;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 
 public class MenuServiceTest {
 
     MessageService messageService1 = mock(MessageService.class);
     MessageService messageService2 = mock(MessageService.class);
     MessageService messageService3 = mock(MessageService.class);
-    private final MenuService testObj = new MenuService(Arrays.asList(messageService1, messageService2, messageService3));
+    private final MenuService testObj = new MenuService(
+            Arrays.asList(messageService1, messageService2, messageService3));
 
     @Test
     public void whenCommandIsSuggestionThenConstructCancel() {

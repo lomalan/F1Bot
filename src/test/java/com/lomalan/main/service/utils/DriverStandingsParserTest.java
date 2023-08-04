@@ -12,21 +12,20 @@ import org.junit.jupiter.api.Test;
 
 class DriverStandingsParserTest {
 
-  @Test
-  void parseDriversStanding() throws IOException {
-    String jsonString = getJsonString();
-    List<DriverStandings> driverStandings = DriverStandingsParser.parseToDriverStandings(jsonString);
+    @Test
+    void parseDriversStanding() throws IOException {
+        String jsonString = getJsonString();
+        List<DriverStandings> driverStandings = DriverStandingsParser.parseToDriverStandings(jsonString);
 
-    assertFalse(driverStandings.isEmpty());
-    assertEquals(21, driverStandings.size());
-    DriverStandings robertKubica = driverStandings.get(19);
-    assertEquals(String.valueOf(0), robertKubica.getPoints());
-    assertEquals("KUB", robertKubica.getDriver().getCode());
-  }
+        assertFalse(driverStandings.isEmpty());
+        assertEquals(21, driverStandings.size());
+        DriverStandings robertKubica = driverStandings.get(19);
+        assertEquals(String.valueOf(0), robertKubica.getPoints());
+        assertEquals("KUB", robertKubica.getDriver().getCode());
+    }
 
-  private String getJsonString() throws IOException {
-    byte[] response = Files.readAllBytes(TestResources.driverStandingsExample());
-    return new String(response);
-  }
-
+    private String getJsonString() throws IOException {
+        byte[] response = Files.readAllBytes(TestResources.driverStandingsExample());
+        return new String(response);
+    }
 }

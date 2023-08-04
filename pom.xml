@@ -69,6 +69,11 @@
 			<artifactId>emoji-java</artifactId>
 			<version>5.1.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.googlejavaformat</groupId>
+			<artifactId>google-java-format</artifactId>
+			<version>1.16.0</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -96,6 +101,21 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>net.revelc.code.formatter</groupId>
+				<artifactId>formatter-maven-plugin</artifactId>
+				<version>2.23.0</version>
+				<executions>
+					<execution>
+						<phase>
+							validate
+						</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

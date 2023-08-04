@@ -12,17 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeatherInfo implements Serializable {
-  private int temp;
+    private int temp;
 
-  @JsonProperty("feels_like")
-  private int feelTemp;
+    @JsonProperty("feels_like")
+    private int feelTemp;
 
-  @JsonProperty("temp_min")
-  private int minTemp;
+    @JsonProperty("temp_min")
+    private int minTemp;
 
-  @JsonProperty("temp_max")
-  private int maxTemp;
+    @JsonProperty("temp_max")
+    private int maxTemp;
 
-  private int pressure;
-  private int humidity;
+    private int pressure;
+    private int humidity;
 }

@@ -21,56 +21,51 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @AllArgsConstructor
 public class SuggestionStateService implements MessageService {
 
+    private static final String SUGGESTIONS_LIMIT_MESSAGE = "Suggestions cannot be more than 5 per day per user";
+    private static final String MESSAGE = "Thank you for your suggestion!";
 
-  private static final String SUGGESTIONS_LIMIT_MESSAGE = "Suggestions cannot be more than 5 per day per user";
-  private static final String MESSAGE = "Thank you for your suggestion!";
+    private SuggestionRepository suggestionRepository;
+    private TelegramUserRepository userRepository;
 
-  private SuggestionRepository suggestionRepository;
-  private TelegramUserRepository userRepository;
-
-  public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    if (!user.getState().equals(BotState.SUGGESTION)) {
-      return Optional.empty();
-    }
-    processUserStatus(user);
-    String chatId = update.getMessage().getChatId().toString();
-    return processSuggestions(update, chatId);
-  }
-
-  private void processUserStatus(TelegramUser user) {
-    user.setState(BotState.MAIN_MENU);
-    userRepository.save(user);
-  }
-
-  private Optional<MessageContainer> processSuggestions(Update update, String chatId) {
-    if (BotCommands.CANCEL.getCommandName().equals(update.getMessage().getText())) {
-      return Optional.empty();
-    }
-    List<Suggestion> suggestions = suggestionRepository.findByChatId(chatId).stream()
-        .filter(suggestion -> suggestion.getDateStamp().equals(LocalDate.now()))
-        .collect(Collectors.toList());
-
-    if (suggestions.size() >= 5) {
-      return Optional.of(new MessageContainer(SUGGESTIONS_LIMIT_MESSAGE));
+    public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
+        if (!user.getState().equals(BotState.SUGGESTION)) {
+            return Optional.empty();
+        }
+        processUserStatus(user);
+        String chatId = update.getMessage().getChatId().toString();
+        return processSuggestions(update, chatId);
     }
 
-    saveSuggestion(update, chatId);
-    return Optional.of(new MessageContainer(MESSAGE));
-  }
-
-  private void saveSuggestion(Update update, String chatId) {
-    try {
-      suggestionRepository.save(prepareSuggestionToSave(update, chatId));
-    } catch (DuplicateKeyException ignored) {
-
+    private void processUserStatus(TelegramUser user) {
+        user.setState(BotState.MAIN_MENU);
+        userRepository.save(user);
     }
-  }
 
-  private Suggestion prepareSuggestionToSave(Update update, String chatId) {
-    return Suggestion.builder()
-        .chatId(chatId)
-        .suggestionText(update.getMessage().getText())
-        .dateStamp(LocalDate.now())
-        .build();
-  }
+    private Optional<MessageContainer> processSuggestions(Update update, String chatId) {
+        if (BotCommands.CANCEL.getCommandName().equals(update.getMessage().getText())) {
+            return Optional.empty();
+        }
+        List<Suggestion> suggestions = suggestionRepository.findByChatId(chatId).stream()
+                .filter(suggestion -> suggestion.getDateStamp().equals(LocalDate.now())).collect(Collectors.toList());
+
+        if (suggestions.size() >= 5) {
+            return Optional.of(new MessageContainer(SUGGESTIONS_LIMIT_MESSAGE));
+        }
+
+        saveSuggestion(update, chatId);
+        return Optional.of(new MessageContainer(MESSAGE));
+    }
+
+    private void saveSuggestion(Update update, String chatId) {
+        try {
+            suggestionRepository.save(prepareSuggestionToSave(update, chatId));
+        } catch (DuplicateKeyException ignored) {
+
+        }
+    }
+
+    private Suggestion prepareSuggestionToSave(Update update, String chatId) {
+        return Suggestion.builder().chatId(chatId).suggestionText(update.getMessage().getText())
+                .dateStamp(LocalDate.now()).build();
+    }
 }

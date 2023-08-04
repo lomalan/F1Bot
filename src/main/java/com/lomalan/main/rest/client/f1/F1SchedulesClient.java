@@ -11,20 +11,20 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class F1SchedulesClient {
 
-  @Value("${ergast.api}")
-  private String ergastApi;
+    @Value("${ergast.api}")
+    private String ergastApi;
 
-  private static final String CURRENT_SEASON_NEXT_RACE_ENDPOINT = "current/next.json";
+    private static final String CURRENT_SEASON_NEXT_RACE_ENDPOINT = "current/next.json";
 
-  public Race getNextRace() {
-    String urlToExecute = ergastApi.concat(CURRENT_SEASON_NEXT_RACE_ENDPOINT);
-    try {
-      String response = F1ClientHelper.getJson(urlToExecute);
-      log.info("F1Schedules response is: {}", response);
-      return RaceResultsParser.parseToRace(response);
-    } catch (IOException e) {
-      log.error("F1Schedules resulted with error", e);
-      throw new IllegalArgumentException("Next race should be present");
+    public Race getNextRace() {
+        String urlToExecute = ergastApi.concat(CURRENT_SEASON_NEXT_RACE_ENDPOINT);
+        try {
+            String response = F1ClientHelper.getJson(urlToExecute);
+            log.info("F1Schedules response is: {}", response);
+            return RaceResultsParser.parseToRace(response);
+        } catch (IOException e) {
+            log.error("F1Schedules resulted with error", e);
+            throw new IllegalArgumentException("Next race should be present");
+        }
     }
-  }
 }

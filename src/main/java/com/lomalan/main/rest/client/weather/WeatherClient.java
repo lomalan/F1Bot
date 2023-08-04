@@ -16,30 +16,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 public class WeatherClient {
 
-  private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-  @Value("${weather.api}")
-  private String weatherApi;
-  @Value("${weather.api.key}")
-  private String weatherApiKey;
+    @Value("${weather.api}")
+    private String weatherApi;
 
-  public WeatherClient(RestTemplate restTemplate) {
-    this.restTemplate = restTemplate;
-  }
+    @Value("${weather.api.key}")
+    private String weatherApiKey;
 
-  public WeatherResponse getWeatherOnRaceLocation(Location location) {
-    UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(weatherApi)
-      .queryParam("appId", weatherApiKey)
-      .queryParam("lat", location.getLatitude())
-      .queryParam("lon", location.getLongitude())
-      .queryParam("units", "metric");
+    public WeatherClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
-    HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
-    ResponseEntity<WeatherResponse> weatherResponse =
-      restTemplate.exchange(builder.toUriString()
-        .replaceAll("%20", " "), HttpMethod.GET, entity, WeatherResponse.class);
-    log.info("Weather response for {} is: {}", location.getLocality(), weatherResponse);
-    return weatherResponse.getBody();
-  }
+    public WeatherResponse getWeatherOnRaceLocation(Location location) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(weatherApi).queryParam("appId", weatherApiKey)
+                .queryParam("lat", location.getLatitude()).queryParam("lon", location.getLongitude())
+                .queryParam("units", "metric");
 
+        HttpEntity<?> entity = new HttpEntity<>(new HttpHeaders());
+        ResponseEntity<WeatherResponse> weatherResponse = restTemplate
+                .exchange(builder.toUriString().replaceAll("%20", " "), HttpMethod.GET, entity, WeatherResponse.class);
+        log.info("Weather response for {} is: {}", location.getLocality(), weatherResponse);
+        return weatherResponse.getBody();
+    }
 }

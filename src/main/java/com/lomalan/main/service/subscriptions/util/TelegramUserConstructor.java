@@ -6,18 +6,13 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 public class TelegramUserConstructor {
 
-  /** Private constructor to avoid instantiation of class */
-  private TelegramUserConstructor() {}
+    /** Private constructor to avoid instantiation of class */
+    private TelegramUserConstructor() {
+    }
 
-  public static TelegramUser prepareUserToSave(User user, BotState state) {
-    return TelegramUser.builder()
-        .userName(user.getUserName())
-        .firstName(user.getFirstName())
-        .lastName(user.getLastName())
-        .chatId(String.valueOf(user.getId()))
-        .isBot(user.getIsBot())
-        .state(state)
-        .build();
-  }
-
+    public static TelegramUser prepareUserToSave(User user, BotState state) {
+        return TelegramUser.builder().userName(user.getUserName()).firstName(user.getFirstName())
+                .lastName(user.getLastName()).chatId(String.valueOf(user.getId())).isBot(user.getIsBot()).state(state)
+                .build();
+    }
 }

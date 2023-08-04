@@ -9,10 +9,12 @@ import org.springframework.data.mongodb.core.index.Indexed;
 @Data
 @Builder
 public class Suggestion {
-  @Id
-  private String id;
-  private String chatId;
-  @Indexed(unique = true)
-  private String suggestionText;
-  private LocalDate dateStamp;
+    @Id
+    private String id;
+    private String chatId;
+
+    @Indexed(unique = true)
+    private String suggestionText;
+
+    private LocalDate dateStamp;
 }

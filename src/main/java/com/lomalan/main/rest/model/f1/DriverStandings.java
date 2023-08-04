@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class DriverStandings {
-  private String position;
-  private String points;
-  private String wins;
-  private Driver driver;
+    private String position;
+    private String points;
+    private String wins;
+    private Driver driver;
 }
