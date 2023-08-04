@@ -1,5 +1,9 @@
 package com.lomalan.main.service.suggestions;
 
+import static com.lomalan.main.TestResources.createUpdate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.lomalan.main.bot.state.BotState;
 import com.lomalan.main.dao.model.Suggestion;
@@ -7,26 +11,20 @@ import com.lomalan.main.dao.model.TelegramUser;
 import com.lomalan.main.dao.repository.SuggestionRepository;
 import com.lomalan.main.dao.repository.TelegramUserRepository;
 import com.lomalan.main.model.MessageContainer;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-
 import java.time.LocalDate;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static com.lomalan.main.TestResources.createUpdate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 class SuggestionStateServiceTest {
 
     private final TelegramUserRepository telegramUserRepository = Mockito.mock(TelegramUserRepository.class);
     private final SuggestionRepository suggestionRepository = Mockito.mock(SuggestionRepository.class);
-    private final SuggestionStateService suggestionStateService =
-            new SuggestionStateService(suggestionRepository, telegramUserRepository);
+    private final SuggestionStateService suggestionStateService = new SuggestionStateService(suggestionRepository,
+            telegramUserRepository);
 
     private final ArgumentCaptor<Suggestion> suggestionCaptor = ArgumentCaptor.forClass(Suggestion.class);
 
@@ -34,8 +32,8 @@ class SuggestionStateServiceTest {
     void whenStateIsNotSuggestionThenReturnEmptyResult() {
         TelegramUser telegramUser = TelegramUser.builder().state(BotState.MAIN_MENU).build();
 
-        Optional<MessageContainer> messageContainer =
-                suggestionStateService.processMessage(createUpdate(""), telegramUser);
+        Optional<MessageContainer> messageContainer = suggestionStateService.processMessage(createUpdate(""),
+                telegramUser);
 
         assertTrue(messageContainer.isEmpty());
     }
@@ -44,8 +42,8 @@ class SuggestionStateServiceTest {
     void whenStateIsSuggestionThenReturnResult() {
         TelegramUser telegramUser = TelegramUser.builder().state(BotState.SUGGESTION).build();
 
-        Optional<MessageContainer> messageContainer =
-                suggestionStateService.processMessage(createUpdate("Some text"), telegramUser);
+        Optional<MessageContainer> messageContainer = suggestionStateService.processMessage(createUpdate("Some text"),
+                telegramUser);
 
         assertTrue(messageContainer.isPresent());
         assertEquals("Thank you for your suggestion!", messageContainer.get().getText());
@@ -57,15 +55,14 @@ class SuggestionStateServiceTest {
         Suggestion suggestion = suggestionCaptor.getValue();
         assertEquals("Some text", suggestion.getSuggestionText());
         assertEquals("1", suggestion.getChatId());
-
     }
 
     @Test
     void whenCommandIsCancelThenReturnEmptyResultButChangeUserState() {
         TelegramUser telegramUser = TelegramUser.builder().state(BotState.SUGGESTION).build();
 
-        Optional<MessageContainer> messageContainer =
-                suggestionStateService.processMessage(createUpdate("Cancel"), telegramUser);
+        Optional<MessageContainer> messageContainer = suggestionStateService.processMessage(createUpdate("Cancel"),
+                telegramUser);
 
         assertFalse(messageContainer.isPresent());
         Mockito.verify(telegramUserRepository, Mockito.times(1))
@@ -76,12 +73,9 @@ class SuggestionStateServiceTest {
     void whenThereAreMoreThan5SuggestionsPerDayThenReturnResultWithExceededLimitMessage() {
         TelegramUser telegramUser = TelegramUser.builder().state(BotState.SUGGESTION).build();
         Mockito.when(suggestionRepository.findByChatId("1"))
-                .thenReturn(IntStream.range(0, 7)
-                        .mapToObj(i -> buildEmptySuggestion())
-                        .collect(Collectors.toList())
-                );
-        Optional<MessageContainer> messageContainer =
-                suggestionStateService.processMessage(createUpdate("Suggestion 7"), telegramUser);
+                .thenReturn(IntStream.range(0, 7).mapToObj(i -> buildEmptySuggestion()).collect(Collectors.toList()));
+        Optional<MessageContainer> messageContainer = suggestionStateService
+                .processMessage(createUpdate("Suggestion 7"), telegramUser);
 
         assertTrue(messageContainer.isPresent());
         assertEquals("Suggestions cannot be more than 5 per day per user", messageContainer.get().getText());

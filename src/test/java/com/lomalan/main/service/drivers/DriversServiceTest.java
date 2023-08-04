@@ -1,5 +1,10 @@
 package com.lomalan.main.service.drivers;
 
+import static com.lomalan.main.TestResources.createUpdate;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.lomalan.main.bot.commands.BotCommands;
 import com.lomalan.main.dao.model.TelegramUser;
@@ -12,12 +17,6 @@ import java.util.Collections;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
-
-import static com.lomalan.main.TestResources.createUpdate;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class DriversServiceTest {
 
@@ -36,8 +35,7 @@ class DriversServiceTest {
     void whenCommandIsDriversStandingButErrorInClientThenReturnEmptyContainer() throws IOException {
         Update update = createUpdate(BotCommands.DRIVERS_STANDING.getCommandName());
 
-        when(f1StandingsClient.getDriverStandings())
-                .thenThrow(new IOException("Resource not found"));
+        when(f1StandingsClient.getDriverStandings()).thenThrow(new IOException("Resource not found"));
 
         Optional<MessageContainer> result = driversService.processMessage(update, TelegramUser.builder().build());
         assertTrue(result.isPresent());
@@ -49,13 +47,10 @@ class DriversServiceTest {
     void whenCommandIsDriversStandingThenReturnDriverStandings() throws IOException {
         Update update = createUpdate(BotCommands.DRIVERS_STANDING.getCommandName());
 
-        when(f1StandingsClient.getDriverStandings())
-                .thenReturn(Collections.singletonList(createStandings()));
+        when(f1StandingsClient.getDriverStandings()).thenReturn(Collections.singletonList(createStandings()));
         Optional<MessageContainer> result = driversService.processMessage(update, TelegramUser.builder().build());
         assertTrue(result.isPresent());
-        String expectedText = "Current drivers standing \n\n"
-                + "POS NAME POINTS \n\n"
-                + "1. ALO 100";
+        String expectedText = "Current drivers standing \n\n" + "POS NAME POINTS \n\n" + "1. ALO 100";
         assertEquals(expectedText, result.get().getText());
     }
 

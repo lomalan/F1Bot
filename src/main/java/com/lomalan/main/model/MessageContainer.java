@@ -11,10 +11,10 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 @Getter
 @Data
 public class MessageContainer {
-  private String text;
-  private InputFile photo;
+    private String text;
+    private InputFile photo;
 
-  public MessageContainer(String text) {
-    this.text = text;
-  }
+    public MessageContainer(String text) {
+        this.text = text;
+    }
 }

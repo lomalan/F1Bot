@@ -19,36 +19,35 @@ import org.mockito.Mockito;
 
 public class ScheduleServiceImplTest {
 
-  private F1SchedulesClient f1SchedulesClient;
-  private ScheduleServiceImpl testObject;
+    private F1SchedulesClient f1SchedulesClient;
+    private ScheduleServiceImpl testObject;
 
-  @BeforeEach
-  void setup() {
-    f1SchedulesClient = Mockito.mock(F1SchedulesClient.class);
-    testObject = new ScheduleServiceImpl(f1SchedulesClient);
-  }
+    @BeforeEach
+    void setup() {
+        f1SchedulesClient = Mockito.mock(F1SchedulesClient.class);
+        testObject = new ScheduleServiceImpl(f1SchedulesClient);
+    }
 
-  @Test
-  void whenThereAreSchedulesAvailableWithoutPictureThenReturnOnlyMessage() {
-    Race nextRace = createNextRace(LocalDateTime.of(2021, Month.APRIL, 15, 12, 0, 0));
-    Mockito.when(f1SchedulesClient.getNextRace()).thenReturn(nextRace);
+    @Test
+    void whenThereAreSchedulesAvailableWithoutPictureThenReturnOnlyMessage() {
+        Race nextRace = createNextRace(LocalDateTime.of(2021, Month.APRIL, 15, 12, 0, 0));
+        Mockito.when(f1SchedulesClient.getNextRace()).thenReturn(nextRace);
 
-    Optional<MessageContainer> resultMessageContainer = testObject.getNextRace();
-    assertTrue(resultMessageContainer.isPresent());
-    assertNull(resultMessageContainer.get().getPhoto());
-    assertNotNull(resultMessageContainer.get().getText());
-  }
+        Optional<MessageContainer> resultMessageContainer = testObject.getNextRace();
+        assertTrue(resultMessageContainer.isPresent());
+        assertNull(resultMessageContainer.get().getPhoto());
+        assertNotNull(resultMessageContainer.get().getText());
+    }
 
-  @Test
-  void whenThereAreSchedulesAvailableWithPictureThenReturnMessageWithPhoto() {
-    Race nextRace = createNextRace(LocalDateTime.of(2021, Month.APRIL, 15, 12, 0, 0));
-    nextRace.setCircuit(
-        Circuit.builder().location(createLocationWithCustomData("Abu Dhabi", "UAE")).build());
-    Mockito.when(f1SchedulesClient.getNextRace()).thenReturn(nextRace);
+    @Test
+    void whenThereAreSchedulesAvailableWithPictureThenReturnMessageWithPhoto() {
+        Race nextRace = createNextRace(LocalDateTime.of(2021, Month.APRIL, 15, 12, 0, 0));
+        nextRace.setCircuit(Circuit.builder().location(createLocationWithCustomData("Abu Dhabi", "UAE")).build());
+        Mockito.when(f1SchedulesClient.getNextRace()).thenReturn(nextRace);
 
-    Optional<MessageContainer> resultMessageContainer = testObject.getNextRace();
-    assertTrue(resultMessageContainer.isPresent());
-    assertNotNull(resultMessageContainer.get().getPhoto());
-    assertNotNull(resultMessageContainer.get().getText());
-  }
+        Optional<MessageContainer> resultMessageContainer = testObject.getNextRace();
+        assertTrue(resultMessageContainer.isPresent());
+        assertNotNull(resultMessageContainer.get().getPhoto());
+        assertNotNull(resultMessageContainer.get().getText());
+    }
 }

@@ -7,5 +7,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SuggestionRepository extends MongoRepository<Suggestion, UUID> {
 
-  List<Suggestion> findByChatId(String chatId);
+    List<Suggestion> findByChatId(String chatId);
 }

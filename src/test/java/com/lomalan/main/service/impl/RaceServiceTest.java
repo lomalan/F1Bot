@@ -16,28 +16,27 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 class RaceServiceTest {
 
-  private final ScheduleService scheduleService = mock(ScheduleService.class);
+    private final ScheduleService scheduleService = mock(ScheduleService.class);
 
-  private final RaceService testObject = new RaceService(scheduleService);
+    private final RaceService testObject = new RaceService(scheduleService);
 
-  @Test
-  void whenCommandIsNotNextRaceReturnEmpty() {
-    Optional<MessageContainer> result =
-        testObject.processMessage(createUpdate("SomeText"), TelegramUser.builder().build());
+    @Test
+    void whenCommandIsNotNextRaceReturnEmpty() {
+        Optional<MessageContainer> result = testObject.processMessage(createUpdate("SomeText"),
+                TelegramUser.builder().build());
 
-    assertTrue(result.isEmpty());
-  }
+        assertTrue(result.isEmpty());
+    }
 
-  @Test
-  void whenCommandIsNextRaceReturnResult() {
-    String expectedResult = "Success";
-    Update update = createUpdate(BotCommands.NEXT_RACE.getCommandName());
-    Mockito.when(scheduleService.getNextRace())
-        .thenReturn(Optional.of(MessageContainer.builder().text(expectedResult).build()));
-    Optional<MessageContainer> result =
-        testObject.processMessage(update, TelegramUser.builder().build());
+    @Test
+    void whenCommandIsNextRaceReturnResult() {
+        String expectedResult = "Success";
+        Update update = createUpdate(BotCommands.NEXT_RACE.getCommandName());
+        Mockito.when(scheduleService.getNextRace())
+                .thenReturn(Optional.of(MessageContainer.builder().text(expectedResult).build()));
+        Optional<MessageContainer> result = testObject.processMessage(update, TelegramUser.builder().build());
 
-    assertTrue(result.isPresent());
-    assertEquals(expectedResult, result.get().getText());
-  }
+        assertTrue(result.isPresent());
+        assertEquals(expectedResult, result.get().getText());
+    }
 }

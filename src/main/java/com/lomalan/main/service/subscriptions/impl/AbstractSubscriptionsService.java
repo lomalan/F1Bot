@@ -57,9 +57,7 @@ public abstract class AbstractSubscriptionsService implements SubscriptionsServi
             return StringUtils.EMPTY;
         }
 
-        return isUserSubscribed(telegramUser)
-                ? ALREADY_SUB
-                : subUser(telegramUser);
+        return isUserSubscribed(telegramUser) ? ALREADY_SUB : subUser(telegramUser);
     }
 
     @Override
@@ -68,8 +66,6 @@ public abstract class AbstractSubscriptionsService implements SubscriptionsServi
             return StringUtils.EMPTY;
         }
 
-        return isUserSubscribed(telegramUser)
-                ? unsubUser(telegramUser)
-                : ALREADY_UNSUB;
+        return isUserSubscribed(telegramUser) ? unsubUser(telegramUser) : ALREADY_UNSUB;
     }
 }

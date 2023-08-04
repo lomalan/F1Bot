@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CommandNames {
-  private String subCommandName;
-  private String unsubCommandName;
+    private String subCommandName;
+    private String unsubCommandName;
 }

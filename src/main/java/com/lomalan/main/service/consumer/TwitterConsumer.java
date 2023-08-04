@@ -13,14 +13,13 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TwitterConsumer {
 
-  private final MessageExecutor messageExecutor;
-  private final TelegramUserRepository userRepository;
+    private final MessageExecutor messageExecutor;
+    private final TelegramUserRepository userRepository;
 
-  @KafkaListener(topics = "${kafka.topic.resource-configuration}", autoStartup = "true")
-  public void consume(String tweetUrl) {
-    log.info(String.format("#### -> Consumed message -> %s", tweetUrl));
-    userRepository.findAll().stream()
-        .filter(TelegramUser::isSubscribedOnTwitterUpdates)
-        .forEach(user -> messageExecutor.executeMessage(user, tweetUrl));
-  }
+    @KafkaListener(topics = "${kafka.topic.resource-configuration}", autoStartup = "true")
+    public void consume(String tweetUrl) {
+        log.info(String.format("#### -> Consumed message -> %s", tweetUrl));
+        userRepository.findAll().stream().filter(TelegramUser::isSubscribedOnTwitterUpdates)
+                .forEach(user -> messageExecutor.executeMessage(user, tweetUrl));
+    }
 }

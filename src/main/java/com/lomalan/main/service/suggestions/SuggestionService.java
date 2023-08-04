@@ -15,20 +15,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @AllArgsConstructor
 public class SuggestionService implements MessageService {
 
-  private static final String MESSAGE = "Please write your suggestions. If you changed your mind, press 'Cancel'";
-  private TelegramUserRepository userRepository;
+    private static final String MESSAGE = "Please write your suggestions. If you changed your mind, press 'Cancel'";
+    private TelegramUserRepository userRepository;
 
-  @Override
-  public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    if (!BotCommands.SUGGESTION.getCommandName().equals(update.getMessage().getText())) {
-      return Optional.empty();
+    @Override
+    public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
+        if (!BotCommands.SUGGESTION.getCommandName().equals(update.getMessage().getText())) {
+            return Optional.empty();
+        }
+        saveUser(user);
+        return Optional.of(new MessageContainer(MESSAGE));
     }
-    saveUser(user);
-    return Optional.of(new MessageContainer(MESSAGE));
-  }
 
-  private void saveUser(TelegramUser telegramUser) {
-    telegramUser.setState(BotState.SUGGESTION);
-    userRepository.save(telegramUser);
-  }
+    private void saveUser(TelegramUser telegramUser) {
+        telegramUser.setState(BotState.SUGGESTION);
+        userRepository.save(telegramUser);
+    }
 }

@@ -19,121 +19,106 @@ import org.apache.commons.lang3.StringUtils;
 
 public class MessageConstructor {
 
-  private static final String CELSIUS_SIGN = "°C";
-  private static final String DOUBLE_NEW_LINE = "\n\n";
+    private static final String CELSIUS_SIGN = "°C";
+    private static final String DOUBLE_NEW_LINE = "\n\n";
 
-  private MessageConstructor() {
-  }
-
-  public static String constructNextRaceMessage(Race nextRace) {
-    return getRaceInfo(nextRace);
-  }
-
-  public static String constructRaceResultsMassage(RaceResults raceResults) {return getRaceResultsInfo(raceResults); }
-
-  public static String constructStandingsMessage(List<DriverStandings> driverStandings) {
-    if (driverStandings.isEmpty()) {
-      return "Sorry, can't return driver standings. Please try again later.";
+    private MessageConstructor() {
     }
-    return getDriversStanding(driverStandings);
-  }
 
-  public static String constructWeatherMessage(WeatherResponse response, String cityName) {
-    Weather weather = response.getWeather().get(0);
-    WeatherInfo weatherInfo = response.getWeatherInfo();
-    return String.format("%s %s%s", "Current weather in ", cityName, DOUBLE_NEW_LINE)
-      + findEmojiForString(weather.getMain()) + "(" + weather.getDescription() +")" + "\n"
-      + "Temperature: " + weatherInfo.getTemp() + CELSIUS_SIGN + "\n"
-      + "Feels like: " + weatherInfo.getFeelTemp() + CELSIUS_SIGN + "\n"
-      + "Humidity: " + weatherInfo.getHumidity() + "%\n\n"
-      + "Wind speed: " + response.getWindSpeed() + " m/s \n"
-      + "Cloudiness: " + response.getCloudiness() + "%";
-  }
-
-  private static String getDriversStanding(List<DriverStandings> driverStandings) {
-    return
-        "Current drivers standing \n\n"
-        + "POS NAME POINTS \n\n"
-        + driverStandings.stream()
-            .map(MessageConstructor::toStringValue)
-            .collect(Collectors.joining("\n"));
-  }
-
-  private static String toStringValue(DriverStandings driverStandings) {
-    return driverStandings.getPosition().concat(". ")
-        .concat(driverStandings.getDriver().getCode()).concat(StringUtils.SPACE)
-        .concat(String.valueOf(driverStandings.getPoints()));
-  }
-
-  private static String getRaceResultsInfo(RaceResults raceResults) {
-     return resolveResultsRaceTitle(raceResults)
-       + "Season: " + raceResults.getSeason() + "\n\n"
-       + "Round: " + raceResults.getRound() + "\n\n"
-       + "Driver standings: \n\n"
-       + Emojis.CHECKERED_FLAG.getUnicodeString() + "Name Points" + "\n\n"
-       + raceResults.getDriverStandings().stream().map(MessageConstructor::toStringValue).collect(Collectors.joining("\n")) + "\n\n"
-       + "Wiki info: " + raceResults.getUrl();
-  }
-
-  private static String getRaceInfo(Race race) {
-    Map<String, LocalDateTime> eventMap = getEventMap(race);
-    
-    return resolveTitle(race)      
-      + "Race date: " + race.getDate() + "\n\n"
-      + parseEvents(eventMap) + "\n\n"
-      + "City: " + race.getCircuit().getLocation().getLocality() + "\n\n"
-      + "Circuit info: " + race.getCircuit().getUrl() + "\n\n"
-      + "Race wiki info: " + race.getUrl();
-  }
-
-  private static String parseEvents(Map<String, LocalDateTime> eventMap) {
-    return eventMap.entrySet().stream()
-      .map(entry -> getUkrainianTimeForEvent(entry.getValue(), entry.getKey()))
-      .collect(Collectors.joining("\n\n")); 
-  }
-
-  private static Map<String, LocalDateTime> getEventMap(Race race) {
-    HashMap<String, LocalDateTime> eventToTimeMap = new LinkedHashMap<>();
-    eventToTimeMap.put("First Practice", race.getFirstPractice().getDateTime());
-    eventToTimeMap.put("Second Practice", race.getSecondPractice().getDateTime());
-    if (race.getThirdPractice() != null) {
-      eventToTimeMap.put("Third Practice", race.getThirdPractice().getDateTime());
+    public static String constructNextRaceMessage(Race nextRace) {
+        return getRaceInfo(nextRace);
     }
-    eventToTimeMap.put("Qualification", race.getQuali().getDateTime());
-    if (race.getSprint() != null) {
-      eventToTimeMap.put("Sprint", race.getSprint().getDateTime());
+
+    public static String constructRaceResultsMassage(RaceResults raceResults) {
+        return getRaceResultsInfo(raceResults);
     }
-    eventToTimeMap.put("Race", race.getDateTime());
-    return eventToTimeMap;
-  }
 
-  private static String getUkrainianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
-    return Emojis.UKRAINE.getUnicodeString() + eventName + " time: " + formatTimeAndDate(eventDateTime);
-  }
+    public static String constructStandingsMessage(List<DriverStandings> driverStandings) {
+        if (driverStandings.isEmpty()) {
+            return "Sorry, can't return driver standings. Please try again later.";
+        }
+        return getDriversStanding(driverStandings);
+    }
 
-  private static String resolveTitle(Race race) {
-    String emojiUnicodeValue = findEmojiForString(race.getCircuit().getLocation().getCountry());
-    return String.format("%s%s%s%s", emojiUnicodeValue, race.getRaceName(), emojiUnicodeValue, "\n\n");
-  }
+    public static String constructWeatherMessage(WeatherResponse response, String cityName) {
+        Weather weather = response.getWeather().get(0);
+        WeatherInfo weatherInfo = response.getWeatherInfo();
+        return String.format("%s %s%s", "Current weather in ", cityName, DOUBLE_NEW_LINE)
+                + findEmojiForString(weather.getMain()) + "(" + weather.getDescription() + ")" + "\n" + "Temperature: "
+                + weatherInfo.getTemp() + CELSIUS_SIGN + "\n" + "Feels like: " + weatherInfo.getFeelTemp()
+                + CELSIUS_SIGN + "\n" + "Humidity: " + weatherInfo.getHumidity() + "%\n\n" + "Wind speed: "
+                + response.getWindSpeed() + " m/s \n" + "Cloudiness: " + response.getCloudiness() + "%";
+    }
 
-  private static String resolveResultsRaceTitle(RaceResults raceResults) {
-    String emojiUnicodeValue = Emojis.F1.getUnicodeString();
-    return  String.format("%s%s%s%s", emojiUnicodeValue, raceResults.getRaceName(), emojiUnicodeValue, "\n\n");
-  }
+    private static String getDriversStanding(List<DriverStandings> driverStandings) {
+        return "Current drivers standing \n\n" + "POS NAME POINTS \n\n"
+                + driverStandings.stream().map(MessageConstructor::toStringValue).collect(Collectors.joining("\n"));
+    }
 
-  private static String findEmojiForString(String value) {
-    return Arrays.stream(Emojis.values())
-        .filter(emojis -> emojis.name().equalsIgnoreCase(value))
-        .map(Emojis::getUnicodeString)
-        .findFirst()
-        .orElse(Emojis.F1.getUnicodeString());
-  }
+    private static String toStringValue(DriverStandings driverStandings) {
+        return driverStandings.getPosition().concat(". ").concat(driverStandings.getDriver().getCode())
+                .concat(StringUtils.SPACE).concat(String.valueOf(driverStandings.getPoints()));
+    }
 
-  private static String formatTimeAndDate(LocalDateTime raceDateTime) {
-    ZoneId uaTimeZone = ZoneId.of("Europe/Kiev");
-    ZoneId utc = ZoneId.of("UTC");
+    private static String getRaceResultsInfo(RaceResults raceResults) {
+        return resolveResultsRaceTitle(raceResults) + "Season: " + raceResults.getSeason() + "\n\n" + "Round: "
+                + raceResults.getRound() + "\n\n" + "Driver standings: \n\n" + Emojis.CHECKERED_FLAG.getUnicodeString()
+                + "Name Points" + "\n\n" + raceResults.getDriverStandings().stream()
+                        .map(MessageConstructor::toStringValue).collect(Collectors.joining("\n"))
+                + "\n\n" + "Wiki info: " + raceResults.getUrl();
+    }
 
-    return raceDateTime.atZone(utc).withZoneSameInstant(uaTimeZone)
-        .toLocalTime().toString();
-  }
+    private static String getRaceInfo(Race race) {
+        Map<String, LocalDateTime> eventMap = getEventMap(race);
+
+        return resolveTitle(race) + "Race date: " + race.getDate() + "\n\n" + parseEvents(eventMap) + "\n\n" + "City: "
+                + race.getCircuit().getLocation().getLocality() + "\n\n" + "Circuit info: " + race.getCircuit().getUrl()
+                + "\n\n" + "Race wiki info: " + race.getUrl();
+    }
+
+    private static String parseEvents(Map<String, LocalDateTime> eventMap) {
+        return eventMap.entrySet().stream().map(entry -> getUkrainianTimeForEvent(entry.getValue(), entry.getKey()))
+                .collect(Collectors.joining("\n\n"));
+    }
+
+    private static Map<String, LocalDateTime> getEventMap(Race race) {
+        HashMap<String, LocalDateTime> eventToTimeMap = new LinkedHashMap<>();
+        eventToTimeMap.put("First Practice", race.getFirstPractice().getDateTime());
+        eventToTimeMap.put("Second Practice", race.getSecondPractice().getDateTime());
+        if (race.getThirdPractice() != null) {
+            eventToTimeMap.put("Third Practice", race.getThirdPractice().getDateTime());
+        }
+        eventToTimeMap.put("Qualification", race.getQuali().getDateTime());
+        if (race.getSprint() != null) {
+            eventToTimeMap.put("Sprint", race.getSprint().getDateTime());
+        }
+        eventToTimeMap.put("Race", race.getDateTime());
+        return eventToTimeMap;
+    }
+
+    private static String getUkrainianTimeForEvent(LocalDateTime eventDateTime, String eventName) {
+        return Emojis.UKRAINE.getUnicodeString() + eventName + " time: " + formatTimeAndDate(eventDateTime);
+    }
+
+    private static String resolveTitle(Race race) {
+        String emojiUnicodeValue = findEmojiForString(race.getCircuit().getLocation().getCountry());
+        return String.format("%s%s%s%s", emojiUnicodeValue, race.getRaceName(), emojiUnicodeValue, "\n\n");
+    }
+
+    private static String resolveResultsRaceTitle(RaceResults raceResults) {
+        String emojiUnicodeValue = Emojis.F1.getUnicodeString();
+        return String.format("%s%s%s%s", emojiUnicodeValue, raceResults.getRaceName(), emojiUnicodeValue, "\n\n");
+    }
+
+    private static String findEmojiForString(String value) {
+        return Arrays.stream(Emojis.values()).filter(emojis -> emojis.name().equalsIgnoreCase(value))
+                .map(Emojis::getUnicodeString).findFirst().orElse(Emojis.F1.getUnicodeString());
+    }
+
+    private static String formatTimeAndDate(LocalDateTime raceDateTime) {
+        ZoneId uaTimeZone = ZoneId.of("Europe/Kiev");
+        ZoneId utc = ZoneId.of("UTC");
+
+        return raceDateTime.atZone(utc).withZoneSameInstant(uaTimeZone).toLocalTime().toString();
+    }
 }

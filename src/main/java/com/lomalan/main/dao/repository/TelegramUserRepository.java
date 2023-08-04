@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface TelegramUserRepository extends MongoRepository<TelegramUser, String> {
 
-  List<TelegramUser> findByUserName(String userName);
-  TelegramUser findByChatId(String chatId);
+    List<TelegramUser> findByUserName(String userName);
+
+    TelegramUser findByChatId(String chatId);
 }

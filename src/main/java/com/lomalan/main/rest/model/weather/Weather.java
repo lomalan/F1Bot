@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Weather implements Serializable {
-  private String id;
-  private String main;
-  private String description;
+    private String id;
+    private String main;
+    private String description;
 }

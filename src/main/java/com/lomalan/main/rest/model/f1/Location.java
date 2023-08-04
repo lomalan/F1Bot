@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Location {
-  @JsonProperty("lat")
-  private String latitude;
+    @JsonProperty("lat")
+    private String latitude;
 
-  @JsonProperty("long")
-  private String longitude;
+    @JsonProperty("long")
+    private String longitude;
 
-  private String locality;
-  private String country;
+    private String locality;
+    private String country;
 }

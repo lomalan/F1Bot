@@ -15,27 +15,27 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class WeatherResponse implements Serializable {
 
-  @JsonProperty("coord")
-  private Coordinates coordinates;
+    @JsonProperty("coord")
+    private Coordinates coordinates;
 
-  private List<Weather> weather;
+    private List<Weather> weather;
 
-  @JsonProperty("main")
-  private WeatherInfo weatherInfo;
+    @JsonProperty("main")
+    private WeatherInfo weatherInfo;
 
-  @JsonProperty("name")
-  private String cityName;
+    @JsonProperty("name")
+    private String cityName;
 
-  private String windSpeed;
-  private String cloudiness;
+    private String windSpeed;
+    private String cloudiness;
 
-  @JsonProperty("wind")
-  public void windSpeedDeserializer(Map<String, Object> wind) {
-    this.windSpeed = wind.get("speed").toString();
-  }
+    @JsonProperty("wind")
+    public void windSpeedDeserializer(Map<String, Object> wind) {
+        this.windSpeed = wind.get("speed").toString();
+    }
 
-  @JsonProperty("clouds")
-  public void cloudinessDeserializer(Map<String, Object> clouds) {
-    this.cloudiness = clouds.get("all").toString();
-  }
+    @JsonProperty("clouds")
+    public void cloudinessDeserializer(Map<String, Object> clouds) {
+        this.cloudiness = clouds.get("all").toString();
+    }
 }

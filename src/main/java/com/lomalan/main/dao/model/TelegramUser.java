@@ -10,16 +10,18 @@ import org.springframework.data.mongodb.core.index.Indexed;
 @Builder
 public class TelegramUser {
 
-  @Id
-  private String id;
-  private Boolean isBot;
-  private String firstName;
-  private String lastName;
-  private String userName;
-  @Indexed(unique = true)
-  private String chatId;
-  private boolean subscribedOnWeather;
-  private boolean subscribedOnLiveUpdates;
-  private boolean subscribedOnTwitterUpdates;
-  private BotState state;
+    @Id
+    private String id;
+    private Boolean isBot;
+    private String firstName;
+    private String lastName;
+    private String userName;
+
+    @Indexed(unique = true)
+    private String chatId;
+
+    private boolean subscribedOnWeather;
+    private boolean subscribedOnLiveUpdates;
+    private boolean subscribedOnTwitterUpdates;
+    private BotState state;
 }

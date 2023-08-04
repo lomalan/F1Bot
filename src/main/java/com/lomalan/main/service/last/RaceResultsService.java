@@ -5,6 +5,5 @@ import java.util.Optional;
 
 public interface RaceResultsService {
 
-  Optional<MessageContainer> getRaceResults();
-
+    Optional<MessageContainer> getRaceResults();
 }

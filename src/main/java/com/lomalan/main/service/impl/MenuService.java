@@ -20,25 +20,21 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @AllArgsConstructor
 public class MenuService implements BotMenuService {
 
-  private final List<MessageService> messageServices;
+    private final List<MessageService> messageServices;
 
-  @Override
-  public ReplyKeyboardMarkup constructMenu(Update update, TelegramUser user) {
-    if (BotCommands.SUGGESTION.getCommandName().equals(update.getMessage().getText())) {
-      return constructCustomMenuKeyBoard(Collections.singletonList(BotCommands.CANCEL));
+    @Override
+    public ReplyKeyboardMarkup constructMenu(Update update, TelegramUser user) {
+        if (BotCommands.SUGGESTION.getCommandName().equals(update.getMessage().getText())) {
+            return constructCustomMenuKeyBoard(Collections.singletonList(BotCommands.CANCEL));
+        }
+        List<String> listToFilterOut = messageServices.stream().map(service -> service.getCurrentCommand(user))
+                .collect(Collectors.toList());
+
+        return constructCustomMenuKeyBoard(getAvailableCommands(String.join(StringUtils.SPACE, listToFilterOut)));
     }
-    List<String> listToFilterOut = messageServices.stream()
-        .map(service -> service.getCurrentCommand(user))
-        .collect(Collectors.toList());
 
-    return constructCustomMenuKeyBoard(getAvailableCommands(String.join(StringUtils.SPACE, listToFilterOut)));
-  }
-
-  private List<BotCommands> getAvailableCommands(String commandName) {
-    return Arrays.stream(BotCommands.values())
-        .filter(c -> !commandName.contains(c.getCommandName()))
-        .filter(command -> BotCommands.CANCEL != command)
-        .collect(Collectors.toList());
-  }
-
+    private List<BotCommands> getAvailableCommands(String commandName) {
+        return Arrays.stream(BotCommands.values()).filter(c -> !commandName.contains(c.getCommandName()))
+                .filter(command -> BotCommands.CANCEL != command).collect(Collectors.toList());
+    }
 }

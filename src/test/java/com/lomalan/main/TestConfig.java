@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 @PropertySource("classpath:application.properties")
 public class TestConfig {
 
-  @Bean
-  public RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

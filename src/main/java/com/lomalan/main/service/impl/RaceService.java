@@ -14,17 +14,17 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @AllArgsConstructor
 public class RaceService implements MessageService {
 
-  private final ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-  @Override
-  public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
-    return getRaceData(update);
-  }
-
-  private Optional<MessageContainer> getRaceData(Update update) {
-    if (BotCommands.NEXT_RACE.getCommandName().equals(update.getMessage().getText())) {
-      return scheduleService.getNextRace();
+    @Override
+    public Optional<MessageContainer> processMessage(Update update, TelegramUser user) {
+        return getRaceData(update);
     }
-    return Optional.empty();
-  }
+
+    private Optional<MessageContainer> getRaceData(Update update) {
+        if (BotCommands.NEXT_RACE.getCommandName().equals(update.getMessage().getText())) {
+            return scheduleService.getNextRace();
+        }
+        return Optional.empty();
+    }
 }
